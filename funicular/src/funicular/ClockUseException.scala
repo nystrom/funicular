@@ -6,7 +6,7 @@
  *
  */
 
-package x10
+package funicular
 
 class ClockUseException(message: String) extends RuntimeException(message) {
 	def this() = this("clock use exception")

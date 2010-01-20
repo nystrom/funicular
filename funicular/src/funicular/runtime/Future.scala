@@ -6,15 +6,15 @@
  *
  */
 
-package x10.runtime
+package funicular.runtime
 
-import x10.Intrinsics._
+import funicular.Intrinsics._
 
 /**
  * The representation of an X10 future expression.
  * @author tardieu
  */
-class Future[T](eval: => T) extends AnyRef with x10.Future[T] {
+class Future[T](eval: => T) extends AnyRef with funicular.Future[T] {
     /**
      * Latch for signaling and wait
      */

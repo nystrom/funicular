@@ -1,4 +1,4 @@
-package x10
+package funicular
 
 object Config {
     val NTHREADS = java.lang.Runtime.getRuntime.availableProcessors

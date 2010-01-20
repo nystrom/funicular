@@ -6,7 +6,7 @@
  *
  */
 
-package x10.runtime;
+package funicular.runtime;
 
 import scala.collection.mutable.Stack;
 import java.util.concurrent.locks.ReentrantLock

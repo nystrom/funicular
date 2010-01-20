@@ -1,10 +1,10 @@
-package x10
+package funicular
 
-import x10.Intrinsics._
+import funicular.Intrinsics._
 
 object Clock {
-    def apply(name:String): Clock = new x10.runtime.Clock(name)
-    def apply(): Clock = new x10.runtime.Clock("clock")
+    def apply(name:String): Clock = new funicular.runtime.Clock(name)
+    def apply(): Clock = new funicular.runtime.Clock("clock")
 }
 
 trait Clock {

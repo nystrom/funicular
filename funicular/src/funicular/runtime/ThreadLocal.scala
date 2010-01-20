@@ -1,4 +1,4 @@
-package x10.runtime
+package funicular.runtime
 
 import java.lang.{ThreadLocal => TL}
 

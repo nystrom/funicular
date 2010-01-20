@@ -1,6 +1,6 @@
-package x10
+package funicular
 
-import x10.runtime.Runtime
+import funicular.runtime.Runtime
 
 abstract class X10Application {
   def run(args: Array[String]): Unit;

@@ -6,7 +6,7 @@
  *
  */
 
-package x10
+package funicular
 
 /**
  * The representation of an X10 future expression.
