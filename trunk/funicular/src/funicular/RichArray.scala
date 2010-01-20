@@ -1,7 +1,7 @@
-package x10
+package funicular
 
-import x10.Intrinsics._
-import x10.runtime.Runtime
+import funicular.Intrinsics._
+import funicular.runtime.Runtime
 
 object RichArray {
     def fromPar[T: ClassManifest](f: Int => T)(n: Int): Array[T] = Array.ofDim[T](n).parInit(f)

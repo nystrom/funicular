@@ -1,13 +1,13 @@
-package x10
+package funicular
 
-import x10.runtime.Runtime
+import funicular.runtime.Runtime
 
 object Intrinsics {
   implicit def wrapArray[T: ClassManifest](a: Array[T]) = new RichArray[T](a)
 
   /**
    * Sleep for the specified number of milliseconds.
-   * [IP] NOTE: Unlike Java, x10 sleep() simply exits when interrupted.
+   * [IP] NOTE: Unlike Java, funicular sleep() simply exits when interrupted.
    * @param millis the number of milliseconds to sleep
    * @return true if completed normally, false if interrupted
    */
@@ -34,7 +34,7 @@ object Intrinsics {
   // usage:
   // async (clocks) { body }
   def async(clocks: Clock*)(body: => Unit) = {
-    Runtime.runAsync(clocks.map((c: Clock) => c.asInstanceOf[x10.runtime.Clock]), body)
+    Runtime.runAsync(clocks.map((c: Clock) => c.asInstanceOf[funicular.runtime.Clock]), body)
   }
 
   // usage:

@@ -6,12 +6,12 @@
 *
 */
 
-package x10.runtime
+package funicular.runtime
 
 import scala.collection.mutable.HashMap
 import scala.util.Random
 import scala.collection.mutable.Stack
-import x10.Intrinsics._
+import funicular.Intrinsics._
 
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 object Runtime {
     val pool = new jsr166y.ForkJoinPool(concurrency)
 
-    def concurrency = x10.Config.NTHREADS
+    def concurrency = funicular.Config.NTHREADS
     // def concurrency = rt.pool.concurrency
 
     private val monitor = new Monitor
@@ -113,7 +113,7 @@ object Runtime {
 
     /**
      * Sleep for the specified number of milliseconds.
-     * [IP] NOTE: Unlike Java, x10 sleep() simply exits when interrupted.
+     * [IP] NOTE: Unlike Java, funicular sleep() simply exits when interrupted.
      * @param millis the number of milliseconds to sleep
      * @return true if completed normally, false if interrupted
      */

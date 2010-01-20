@@ -1,4 +1,4 @@
-package x10
+package funicular
 
 class MultipleExceptions(exceptions: Collection[Throwable]) extends Exception {
     override def printStackTrace = {

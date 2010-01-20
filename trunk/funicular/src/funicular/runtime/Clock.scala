@@ -1,13 +1,13 @@
-package x10.runtime
+package funicular.runtime
 
-import x10.Intrinsics._
-import x10.ClockUseException
+import funicular.Intrinsics._
+import funicular.ClockUseException
 
 object Clock {
     val FIRST_PHASE = 1
 }
 
-class Clock(name:String) extends jsr166y.Phaser with x10.Clock {
+class Clock(name:String) extends jsr166y.Phaser with funicular.Clock {
     def this() = this("clock")
 
     super.register

@@ -6,9 +6,9 @@
  *
  */
 
-package x10.runtime
+package funicular.runtime
 
-import x10.MultipleExceptions
+import funicular.MultipleExceptions
 import scala.collection.mutable.Stack
 import java.util.concurrent.locks.ReentrantLock
 

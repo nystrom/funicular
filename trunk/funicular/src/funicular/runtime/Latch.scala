@@ -6,7 +6,7 @@
  *
  */
 
-package x10.runtime
+package funicular.runtime
 
 /**
  * Boolean latch
