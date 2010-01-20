@@ -1,4 +1,4 @@
-package x10test
+package funicular.test
 /*
  *
  * (C) Copyright IBM Corporation 2009
@@ -6,7 +6,7 @@ package x10test
  *  This is an example program used in the X10 1.7 Tutorial.
  *
  */
-import x10.Intrinsics._
+import funicular.Intrinsics._
 
 /**
  * This is a small program to illustrate the use of 

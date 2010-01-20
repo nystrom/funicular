@@ -1,10 +1,10 @@
-package x10test
+package funicular.test
 
-import x10.Intrinsics._
+import funicular.Intrinsics._
 
 object FRASimpleDist {
 
-    // shadow x10 async
+    // shadow funicular async
     // def async(b: => Unit): Unit = b
 
   class LocalTable( val a: Array[Long], val mask: int) {

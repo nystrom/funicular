@@ -1,8 +1,8 @@
-package x10test
+package funicular.test
 
-import x10.Intrinsics._
-import x10.X10Application
-import x10.Config
+import funicular.Intrinsics._
+import funicular.X10Application
+import funicular.Config
 import scala.util.Random;
 
 object MontyPi extends X10Application {

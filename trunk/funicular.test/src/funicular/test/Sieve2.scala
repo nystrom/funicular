@@ -1,7 +1,7 @@
-package x10test
+package funicular.test
 
-import x10.Intrinsics._
-import x10.Future
+import funicular.Intrinsics._
+import funicular.Future
 
 object Sieve2 {
     class Front[T](val h: T, val t: Future[Front[T]])

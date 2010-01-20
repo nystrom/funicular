@@ -1,6 +1,6 @@
-package x10test
+package funicular.test
 
-import x10.Intrinsics._
+import funicular.Intrinsics._
 
 /**
  * A simple illustration of loop parallelization within a single place.

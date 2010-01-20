@@ -1,8 +1,8 @@
-package x10test
+package funicular.test
 
-import x10.Intrinsics._
+import funicular.Intrinsics._
 
-object Test3 {
+object Test2 {
   class Buffer {
     var empty: Boolean = true;
     var full: Boolean = false;
@@ -29,12 +29,14 @@ object Test3 {
     finish {
       val b = new Buffer
 
-      foreach (1 to 100) {
-        n => { b.value = n }
+      async {
+        for (n <- 1 to 10)
+          b.value = n
       }
 
-      foreach (1 to 100) {
-        n => { println(n + ": " + b.value) }
+      async {
+        for (n <- 1 to 10)
+          println(b.value)
       }
     }
   }

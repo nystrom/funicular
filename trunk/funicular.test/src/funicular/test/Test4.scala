@@ -1,7 +1,7 @@
-package x10test
+package funicular.test
 
-import x10.Intrinsics._
-import x10.Clock
+import funicular.Intrinsics._
+import funicular.Clock
 
 object Test4 {
   def main(args: Array[String]): Unit = {

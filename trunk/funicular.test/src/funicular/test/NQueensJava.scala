@@ -1,4 +1,4 @@
-package x10test
+package funicular.test
 
 import java.util.concurrent.atomic.AtomicBoolean
 import jsr166y.ForkJoinTask

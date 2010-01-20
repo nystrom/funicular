@@ -1,7 +1,7 @@
-package x10test
+package funicular.test
 
-import x10.Intrinsics._
-import x10.Clock
+import funicular.Intrinsics._
+import funicular.Clock
 
 object Test5 {
   val N = 1000
@@ -24,7 +24,7 @@ object Test5 {
       while (c.n != N) {
           errors += 1
     	  println(i + " " + c.n)
-    	  x10.runtime.Runtime.parkNanos(100)
+    	  funicular.runtime.Runtime.parkNanos(100)
       }
       assert(c.n == N, "got " + c.n + " not " + N + " at " + i)
     }
