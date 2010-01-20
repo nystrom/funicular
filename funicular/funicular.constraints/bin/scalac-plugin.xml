@@ -1,0 +1,3 @@
+<plugin>
+	<name>constraints</name>
+	<classname>x10constraints.Constraints</classname></plugin>
