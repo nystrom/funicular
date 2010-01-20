@@ -1,4 +1,4 @@
-package x10constraints
+package funicular.constraints
 
 import scala.tools.nsc
 import nsc.Global
