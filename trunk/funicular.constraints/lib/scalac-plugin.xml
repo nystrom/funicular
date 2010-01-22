@@ -1,3 +1,3 @@
 <plugin>
 	<name>constraints</name>
-	<classname>x10constraints.Constraints</classname></plugin>
+	<classname>funicular.constraints.Constraints</classname></plugin>
