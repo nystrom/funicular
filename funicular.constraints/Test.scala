@@ -1,5 +1,4 @@
-import x10constraints.constraint
-import x10constraints.where
+import funicular.constraints.where
 
 object Test {
   val t = 5

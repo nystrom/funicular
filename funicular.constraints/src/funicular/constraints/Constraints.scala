@@ -169,7 +169,7 @@ class Constraints(val global: Global) extends Plugin {
         }
         
         def whereAnnotation(tpe: Type): Tree = {
-            val C = definitions.getClass("x10constraints.where")
+            val C = definitions.getClass("funicular.constraints.where")
             tpe match {
                 case AnnotatedType(attribs, u, _) => {
                     for (a <- attribs) {
