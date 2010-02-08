@@ -111,8 +111,6 @@ object Intrinsics {
           Runtime.await
   }
 
-  val o = new Object
-
   // usage:
   // atomic { body }
   def atomic[T](body: => T) = {
