@@ -78,6 +78,9 @@ nqueens: compilert bin/funicular/test/NQueensPar.class
 	scala -cp $(CP) funicular.test.NQueensPar 8
 	scala -cp $(CP) funicular.test.NQueensPar 12
 
+deadlock: compilert bin/funicular/test/Deadlock.class
+	scala -cp $(CP) funicular.test.Deadlock
+
 gcspheres: compilert bin/funicular/test/GCSpheres.class
 	scala -cp $(CP) funicular.test.GCSpheres
 
