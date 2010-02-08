@@ -7,13 +7,11 @@ object Histogram {
     * Compute the histogram of the array a in the rail b.
     */
     def run(a:Array[Int], b: Array[Int]) {
-	finish {
-            foreach (0 until a.length) {
-                i => {
-                  val bin = a(i) % b.length
-                  atomic { b(bin) += 1 }
-                }
-	    }
+        foreach (0 until a.length) {
+            i => {
+              val bin = a(i) % b.length
+              atomic { b(bin) += 1 }
+            }
         }
     }
 

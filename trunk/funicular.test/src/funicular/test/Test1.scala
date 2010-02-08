@@ -6,11 +6,11 @@ object Test1 {
   def main(args : Array[String]) : Unit = {
     finish {
       async {
-        funicular.runtime.Runtime.sleep(50)
+        sleep(50)
         println("Hello")
       }
       async {
-        funicular.runtime.Runtime.sleep(50)
+        sleep(50)
         println("World")
       }
     }
