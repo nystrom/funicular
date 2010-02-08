@@ -14,22 +14,12 @@ class RichArray[T: ClassManifest](a: Array[T]) extends Proxy {
 
     def copy = a.map((t:T) => t)
 
-    /*
-    def inParallel =
-            foreach (0 until P) {
-                i => {
-                    val min = i*P
-                    val max = Math.min((i+1)*P, a.length)
-                    for (j <- min until max)
-                        yield a(j)
-                }
-            }
+    def inParallel = new ParArray[T](a)
 
     def print =
         for (ai <- a.inParallel) {
             println(ai)
         }
-*/
 
     def parInit(f: Int => T): Array[T] = {
         finish {
@@ -44,30 +34,6 @@ class RichArray[T: ClassManifest](a: Array[T]) extends Proxy {
         }
         a
     }
-
-    /*
-    class Ops[T <: Number](a: T) {
-        def +(b: Array[T]) = a+b
-        def *(b: Array[T]) = a*b
-        def +(b: Array[Array[T]]) = a+b
-        def *(b: Array[Array[T]]) = a*b
-        def +(b: Array[Array[Array[T]]]) = a+b
-        def *(b: Array[Array[Array[T]]]) = a*b
-        def +(b: Array[Array[Array[Array[T]]]]) = a+b
-        def *(b: Array[Array[Array[Array[T]]]]) = a*b
-        def +(b: Array[Array[Array[Array[Array[T]]]]]) = a+b
-        def *(b: Array[Array[Array[Array[Array[T]]]]]) = a*b
-        def +(b: Array[Array[Array[Array[Array[Array[T]]]]]]) = a+b
-        def *(b: Array[Array[Array[Array[Array[Array[T]]]]]]) = a*b
-    }
-
-    implicit def array2ops[T <: Number](a: Array[T]) = new Ops[T](a)
-
-    def +(a: Array[T <: Number]): Array[T] = reduce(_ + _, 0)
-    def *(a: Array[T <: Number]): Array[T] = reduce(_ * _, 0)
-    def +(a: Array[T <: Number]): Array[T] = reduce(_ + _, 0)
-    def *(a: Array[T <: Number]): Array[T] = reduce(_ * _, 0)
-    */
 
     def lift(f: T => T): Array[T] = 
         Array.ofDim[T](a.length).parInit((i: Int) => f(a(i)))
