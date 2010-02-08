@@ -143,15 +143,19 @@ object Runtime {
 
     val parLock = new AtomicBoolean(false)
 
-    def withLock(lock: AtomicBoolean)(body: => Unit) = {
-        while (parLock.get && ! parLock.getAndSet(true))
-            ()
-        try {
-            body
-        }
-        finally {
-            parLock.set(false)
-        }
+    def withLock(lock: AtomicBoolean)(body: => Unit): Unit = {
+    		while (true) {
+    			while (parLock.get) ()
+    			if (parLock.getAndSet(true)) {
+    				try {
+    					body
+    					return
+    				}
+    				finally {
+    					parLock.set(false)
+    				}
+    			}
+    		}
     }
 
     // notify the pool a worker is about to execute a blocking operation
