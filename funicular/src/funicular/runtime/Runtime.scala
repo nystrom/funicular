@@ -119,6 +119,7 @@ object Runtime {
      */
     def sleep(millis: Long):Boolean = {
         val a = activity
+        assert(false, "sleep is broken")
         try {
             increaseParallelism
             java.lang.Thread.sleep(millis)
