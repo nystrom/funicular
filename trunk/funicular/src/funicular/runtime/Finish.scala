@@ -31,8 +31,8 @@ class Finish {
                 return
 
             while (! activities.isEmpty) {
-                lock.unlock
                 val a = activities.pop
+                lock.unlock
                 a.join
                 lock.lock
             }
