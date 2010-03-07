@@ -23,12 +23,9 @@ class RichArray[T: ClassManifest](a: Array[T]) extends Proxy {
 
     def parInit(f: Int => T): Array[T] = {
         finish {
-            foreach (0 until P) {
-                i => {
-                    val min = i*P
-                    val max = Math.min((i+1)*P, a.length)
-                    for (j <- min until max)
-                        a(j) = f(j)
+            foreach (0 until a.length) {
+                j => {
+                    a(j) = f(j)
                 }
             }
         }
@@ -79,15 +76,20 @@ class RichArray[T: ClassManifest](a: Array[T]) extends Proxy {
         finish {
             foreach (0 until P) {
                 i => {
-                    val min = i*P
-                    val max = Math.min((i+1)*P, a.length)
+                    val min = i*(a.length/P)
+                    val max = Math.min((i+1)*(a.length/P), a.length)
                     var x = z
                     for (j <- min until max)
                         x = f(x, a(j))
                     r(i) = x
+                    println(i + " " + a.length + " :: " + min + ".." + (max-1))
                 }
             }
         }
+
+        Console.out.flush
+
+        println("end reduce")
 
         var x = z
         for (i <- 0 until P)
