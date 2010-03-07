@@ -1,4 +1,4 @@
-package funicular
+package funicular.array
 
 import funicular.Intrinsics._
 import funicular.runtime.Runtime

@@ -1,6 +1,7 @@
 package funicular
 
 import funicular.runtime.Runtime
+import funicular.array.RichArray
 
 object Intrinsics {
   implicit def wrapArray[T: ClassManifest](a: Array[T]) = new RichArray[T](a)
