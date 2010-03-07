@@ -32,6 +32,12 @@ test4: compilert bin/funicular/test/Test4.class
 test5: compilert bin/funicular/test/Test5.class
 	scala -cp $(CP) funicular.test.Test5
 
+test6: compilert bin/funicular/test/Test6.class
+	scala -cp $(CP) funicular.test.Test6
+
+test7: compilert bin/funicular/test/Test7.class
+	scala -cp $(CP) funicular.test.Test7
+
 pra: compilert bin/funicular/test/ParRandomAccess1.class
 	scala -cp $(CP) funicular.test.ParRandomAccess1
 

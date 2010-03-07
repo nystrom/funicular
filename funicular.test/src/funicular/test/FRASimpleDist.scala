@@ -7,9 +7,9 @@ object FRASimpleDist {
     // shadow funicular async
     // def async(b: => Unit): Unit = b
 
-  class LocalTable( val a: Array[Long], val mask: int) {
+  class LocalTable( val a: Array[Long], val mask: Int) {
     
-    def this(size:int) {
+    def this(size:Int) {
         this(Array.fromFunction((i:Int) => i.toLong)(size), size-1)
     }
     
@@ -94,7 +94,7 @@ object FRASimpleDist {
         println("Number of updates = " + num_updates)
 
         // time it
-        var cpuTime:double = -now()
+        var cpuTime:Double = -now()
         randomAccessUpdate(num_updates, logLocalTableSize, tables)
         cpuTime += now()
 
@@ -108,7 +108,7 @@ object FRASimpleDist {
         for (i <- 0 until MAX_PLACES) {
             async {
 	        val table = tables(i)
-                var err:int = 0
+                var err:Int = 0
                 for (j <- 0 until table.a.length)
                     if (table.a(j) != j) err += 1
                 println("Found " + err + " errors.")
