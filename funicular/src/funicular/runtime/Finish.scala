@@ -25,18 +25,33 @@ class Finish {
             lock.unlock
         }
 
+    def withoutLock(body: => Unit) = 
+        try {
+            lock.unlock
+            body
+        }
+        finally {
+            lock.lock
+        }
+
     def join: Unit = {
+        println("*** finishing")
+        Console.flush
         withLock {
             if (activities == null)
                 return
 
             while (! activities.isEmpty) {
                 val a = activities.pop
-                lock.unlock
-                a.join
-                lock.lock
+                withoutLock {
+                    a.join
+                    println("joining " + a)
+                    Console.flush
+                }
             }
         }
+        println("*** finished")
+        Console.flush
     }
 
     def run(a: Activity) = {

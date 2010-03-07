@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 object Runtime {
     val pool = new jsr166y.ForkJoinPool(concurrency)
 
-    def concurrency = funicular.Config.NTHREADS
-    // def concurrency = rt.pool.concurrency
+    lazy val concurrency = 7
+    // lazy val concurrency = funicular.Config.NTHREADS
 
     private val monitor = new Monitor
 
@@ -51,11 +51,15 @@ object Runtime {
             a.runFinish(body)
         }
         else {
+            println("starting")
             val f = new Finish
             val a = new Activity(body, f)
             f.run(a)
+            println("ran " + a)
             f.join
+            println("finished " + a)
             a.join
+            println("joined " + a)
             f.throwExceptions
         }
     }
