@@ -21,8 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 object Runtime {
     val pool = new jsr166y.ForkJoinPool(concurrency)
 
-    lazy val concurrency = 7
-    // lazy val concurrency = funicular.Config.NTHREADS
+    lazy val concurrency = funicular.Config.NTHREADS
 
     private val monitor = new Monitor
 
