@@ -1,6 +1,7 @@
 package funicular.array
 
-import funicular.Intrinsics._
+import funicular.Intrinsics.{foreach => par, _}
+import funicular.Future
 import funicular.runtime.Runtime
 
 class ParArray[A: ClassManifest](a: Array[A]) extends Proxy {
@@ -88,7 +89,7 @@ class ParArray[A: ClassManifest](a: Array[A]) extends Proxy {
     def foreach[B](f: A => B): Unit = {
         println("foreach")
         finish {
-            Intrinsics.foreach (0 until P) {
+            par (0 until P) {
                 i => {
                     println(i + " of " + P)
                     val scale = (a.length + P - 1) / P

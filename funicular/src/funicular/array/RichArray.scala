@@ -3,10 +3,6 @@ package funicular.array
 import funicular.Intrinsics._
 import funicular.runtime.Runtime
 
-object RichArray {
-    def fromPar[T: ClassManifest](f: Int => T)(n: Int): Array[T] = Array.ofDim[T](n).parInit(f)
-}
-
 class RichArray[T: ClassManifest](a: Array[T]) extends Proxy {
     private def P = Runtime.concurrency
 

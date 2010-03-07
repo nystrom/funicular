@@ -2,9 +2,14 @@ package funicular
 
 import funicular.runtime.Runtime
 import funicular.array.RichArray
+import funicular.array.RichArrayType
 
 object Intrinsics {
   implicit def wrapArray[T: ClassManifest](a: Array[T]) = new RichArray[T](a)
+
+  object ParArray {
+      def fromPar[T: ClassManifest](f: Int => T)(n: Int): Array[T] = Array.ofDim[T](n).parInit(f)
+  }
 
   /**
    * Sleep for the specified number of milliseconds.
