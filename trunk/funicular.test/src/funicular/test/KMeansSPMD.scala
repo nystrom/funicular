@@ -18,11 +18,11 @@ object KMeansSPMD {
         }
     }
 
-    class Cloner[T: ClassManifest](a: Array[T]) {
-        def copy = a.map((t:T) => t)
-    }
-
-    implicit def array2cloner[T](a: Array[T]) = new Cloner(a)
+//    class Cloner[T: ClassManifest](a: Array[T]) {
+//        def copy = a.map((t:T) => t)
+//    }
+//
+//    implicit def array2cloner[T: ClassManifest](a: Array[T]) = new Cloner(a)
 
     def main (args : Array[String]): Unit = finish {
         var fname_ :String = "points.dat"

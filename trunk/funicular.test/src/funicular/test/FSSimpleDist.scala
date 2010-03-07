@@ -67,7 +67,7 @@ object FSSimpleDist {
 
     def now():Double = System.nanoTime() * 1e-9
 
-    def printStats(N:int, time:Double, verified:boolean) {
+    def printStats(N:Int, time:Double, verified:Boolean) {
         val size = (3*8*N/MEG)
         val rate = (3*8*N) / (1.0E9*time)
         println("Number of places=" + NUM_PLACES)
