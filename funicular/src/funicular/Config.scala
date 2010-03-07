@@ -1,7 +1,7 @@
 package funicular
 
 object Config {
-    lazy val NTHREADS = java.lang.Runtime.getRuntime.availableProcessors
+    lazy val NTHREADS = (java.lang.Runtime.getRuntime.availableProcessors * 3.5).toInt
     val BOUND = 100
     val MAX_WORKERS = 1000
     val MAXTHREADS = 32767
