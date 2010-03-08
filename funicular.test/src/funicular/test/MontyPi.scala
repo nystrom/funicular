@@ -14,26 +14,31 @@ object MontyPi extends X10Application {
             exit(-1)
         }
 
-        val P = Config.NTHREADS
+        val P = 50
 
         val N = s(0).toInt
 
-        val initializer = (i:Int) => {
-            val r = new Random
-            var result = 0.0
-            for (j <- 1 to N) {
-                val x = r.nextDouble
-                val y = r.nextDouble
-                if (x*x + y*y <= 1.0)
-                    result += 1.0
+        val result = ParArray.fromFunction[Double] {
+            i => {
+                val r = new Random
+                var result = 0.0
+                for (j <- 1 to N) {
+                    val x = r.nextDouble
+                    val y = r.nextDouble
+                    if (x*x + y*y <= 1.0)
+                        result += 1.0
+                }
+                result
             }
-            result
-        }
+        } (P)
 
-        val result = new Array[Double](P).parInit(initializer)
+        println(result.toList)
 
-        val pi = 4 * result.reduce((x:Double,y:Double) => x+y, 0) / (N*P)
+        val pi = 4 * result.reduce(0.)(_+_) / (N*P)
 
         println("The value of pi is " + pi)
+
+        val spi = 4 * result.foldLeft[Double](0.)(_+_) / (N*P)
+        println("The value of sequential pi is " + spi)
     }
 }
