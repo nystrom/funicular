@@ -6,7 +6,7 @@ SCALAC = scalac -optimise -Yinline -Yclosure-elim -Ydead-code
 compilert: $(RTC)
 
 rtc:
-	scalac -optimise -d ../funicular/bin -sourcepath ../funicular/src -classpath bin:../funicular/bin:../funicular/lib/jsr166y.jar ../funicular/src/funicular/runtime/*.scala ../funicular/src/funicular/*.scala
+	scalac -optimise -d ../funicular/bin -sourcepath ../funicular/src -classpath bin:../funicular/bin:../funicular/lib/jsr166y.jar ../funicular/src/funicular/runtime/*.scala ../funicular/src/funicular/array/*.scala ../funicular/src/funicular/*.scala
 
 ../funicular/bin/funicular/%.class: ../funicular/src/funicular/%.scala
 	$(SCALAC) -d ../funicular/bin -classpath $(CP) -sourcepath ../funicular/src $<
@@ -37,6 +37,9 @@ test6: compilert bin/funicular/test/Test6.class
 
 test7: compilert bin/funicular/test/Test7.class
 	scala -cp $(CP) funicular.test.Test7
+
+test8: compilert bin/funicular/test/Test8.class
+	scala -cp $(CP) funicular.test.Test8
 
 pra: compilert bin/funicular/test/ParRandomAccess1.class
 	scala -cp $(CP) funicular.test.ParRandomAccess1
