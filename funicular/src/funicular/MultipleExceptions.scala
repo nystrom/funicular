@@ -3,9 +3,12 @@ package funicular
 class MultipleExceptions(val exceptions: Collection[Throwable]) extends Exception {
     override def printStackTrace = {
         super.printStackTrace
-        println("Caused by:")
-        for (th <- exceptions)
-           th.printStackTrace
+        var msg = "Caused by:"
+        for (th <- exceptions) {
+            println(msg)
+            th.printStackTrace
+            msg = "and by:"
+        }
     }
 }
 
