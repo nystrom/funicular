@@ -17,6 +17,7 @@ class Activity (body: => Unit, val finish: Finish, val clocks: Array[Clock]) ext
      */
     def this(body: => Unit, finish: Finish) {
         this(body, finish, null)
+        // println("this " + this)
     }
 
     def next: Unit = {
@@ -31,7 +32,7 @@ class Activity (body: => Unit, val finish: Finish, val clocks: Array[Clock]) ext
     var innermostFinish: Finish = finish
 
     def runFinish(body: => Unit): Unit = {
-        val old = finish
+        val old = innermostFinish
         val f = new Finish
         try {
             innermostFinish = f

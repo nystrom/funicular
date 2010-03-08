@@ -1,6 +1,6 @@
 package funicular.array
 
-import funicular.Intrinsics.{foreach => par, _}
+import funicular.Intrinsics.{foreach => par, finish, future}
 import funicular.runtime.Runtime
 
 class ParSeq[A](a: Seq[A]) extends Proxy with Seq[A] {
@@ -14,17 +14,13 @@ class ParSeq[A](a: Seq[A]) extends Proxy with Seq[A] {
     def iterator = a.iterator
 
     override def foreach[B](f: A => B): Unit = {
-        println("foreach")
-        finish {
-            par (0 until P) {
-                i => {
-                    println(i + " of " + P)
-                    val scale = (a.length + P - 1) / P
-                    val min = i*scale
-                    val max = Math.min((i+1)*scale, a.length)
-                    for (j <- min until max)
-                        f(a(j))
-                }
+        par (0 until P) {
+            i => {
+                val scale = (a.length + P - 1) / P
+                val min = i*scale
+                val max = Math.min((i+1)*scale, a.length)
+                for (j <- min until max)
+                    f(a(j))
             }
         }
     }

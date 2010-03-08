@@ -3,89 +3,52 @@ package funicular.array
 import funicular.Intrinsics._
 import funicular.runtime.Runtime
 
-class RichArray[T: ClassManifest](a: Array[T]) extends Proxy {
+class RichArray[A: ClassManifest](a: Array[A]) extends Proxy {
     private def P = Runtime.concurrency
 
     def self = a
 
-    def copy = a.map((t:T) => t)
+    def copy = a.map((t:A) => t)
 
-    def inParallel = new ParArray[T](a)
+    def inParallel = new ParArray[A](a)
+    def async = new ParArray[A](a)
+    def asynchronously = new ParArray[A](a)
 
-    def print =
+    def printPar =
         for (ai <- a.inParallel) {
             println(ai)
         }
 
-    def parInit(f: Int => T): Array[T] = {
+    def parInit(f: Int => A): Array[A] = {
         finish {
             foreach (0 until a.length) {
                 j => {
-                    a(j) = f(j)
+                  a(j) = f(j)
                 }
             }
         }
         a
     }
 
-    def lift(f: T => T): Array[T] = 
-        Array.ofDim[T](a.length).parInit((i: Int) => f(a(i)))
+    def lift[B: ClassManifest](f: A => B): Array[B] = 
+        Array.ofDim[B](a.length).parInit(i => f(a(i)))
 
-    /*
-    def scan(f: (T,T) => T, z: T): Array[T] = {
-        var r: T = z
-
-        Array.ofDim[T](a.length).parInit(
-          (i: Int) => {
-              r = f(r, a(i))
-              r
-          })
-    }
-    */
-
-    def mapReduce1[S: ClassManifest](map: T => S, reduce: (S,S) => S): S = {
-        val r = Array.ofDim[S](P)
+    def reduce(z: A)(f: (A,A) => A): A = {
+        val r = Array.ofDim[A](P)
 
         finish {
             foreach (0 until P) {
                 i => {
-                    val min = i*(a.length/P)
-                    val max = Math.min((i+1)*(a.length/P), a.length)
-                    var x = map(a(min))
-                    for (j <- min+1 until max) {
-                        x = reduce(x, map(a(j)))
-                    }
-                    r(i) = x
-                }
-            }
-        }
-
-        var x = r(0)
-        for (i <- 1 until P)
-            x = reduce(x, r(i))
-        x
-    }
-
-    def reduce(f: (T,T) => T, z: T): T = {
-        val r = Array.ofDim[T](P)
-
-        finish {
-            foreach (0 until P) {
-                i => {
-                    val min = i*(a.length/P)
-                    val max = Math.min((i+1)*(a.length/P), a.length)
+                    val scale = (a.length + P - 1) / P
+                    val min = i*scale
+                    val max = Math.min((i+1)*scale, a.length)
                     var x = z
                     for (j <- min until max)
                         x = f(x, a(j))
                     r(i) = x
-                    println(i + " " + a.length + " :: " + min + ".." + (max-1))
                 }
             }
         }
-
-        Console.out.flush
-
-        println("end reduce")
 
         var x = z
         for (i <- 0 until P)
@@ -93,6 +56,3 @@ class RichArray[T: ClassManifest](a: Array[T]) extends Proxy {
         x
     }
 }
-
-
-

@@ -9,14 +9,13 @@
 package funicular.runtime
 
 import funicular.MultipleExceptions
-import scala.collection.mutable.Stack
 import java.util.concurrent.locks.ReentrantLock
 
 /**
  * @author tardieu
  */
 class Finish {
-    def withLock(body: => Unit) = 
+    def withLock[T](body: => T) = 
         try {
             lock.lock
             body
@@ -25,7 +24,7 @@ class Finish {
             lock.unlock
         }
 
-    def withoutLock(body: => Unit) = 
+    def withoutLock[T](body: => T) = 
         try {
             lock.unlock
             body
@@ -35,30 +34,28 @@ class Finish {
         }
 
     def join: Unit = {
-        println("*** finishing")
-        Console.flush
         withLock {
-            if (activities == null)
-                return
-
-            while (! activities.isEmpty) {
-                val a = activities.pop
-                withoutLock {
-                    a.join
-                    println("joining " + a)
-                    Console.flush
+            while (true) {
+                // println("joining " + activities)
+                activities match {
+                    case Nil => return
+                    case a::as => {
+                        activities = as
+                        // println("popping " + a)
+                        withoutLock {
+                            a.join
+                        }
+                    }
                 }
             }
         }
-        println("*** finished")
-        Console.flush
     }
 
     def run(a: Activity) = {
         withLock {
-            if (null == activities)
-                activities = new Stack[Activity]
-            activities push a
+            activities = a::activities
+            // println("pushing " + a)
+            // println("forked " + activities)
         }
         Runtime.pool.execute(a)
     }
@@ -73,23 +70,23 @@ class Finish {
         run(new Activity(body, this))
     }
 
-    private var exceptions: Stack[Throwable] = null
-    private var activities: Stack[Activity] = null
+    private var exceptions: List[Throwable] = Nil
+    private var activities: List[Activity] = Nil
 
     def throwExceptions = {
-        if (exceptions != null)
-            if (exceptions.size == 1)
-                throw exceptions(0)
-            else
-                throw new MultipleExceptions(exceptions)
+        withLock {
+            exceptions match {
+                case Nil => null
+                case e::Nil => throw e
+                case es => throw new MultipleExceptions(es)
+            }
+        }
     }
 
     val lock = new ReentrantLock
 
     def pushException(t:Throwable) = withLock {
-        if (null == exceptions)
-            exceptions = new Stack[Throwable]
-        exceptions push t
+        exceptions = t::exceptions
     }
 }
 
