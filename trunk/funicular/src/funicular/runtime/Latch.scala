@@ -24,10 +24,11 @@ class Latch extends Monitor with Function0[Boolean] {
     override def await = {
         // avoid locking if state == true
         if (!state) {
-            lock
-            while (!state)
-            	super.await
-            unlock
+            withLock {
+                while (!state) {
+                    super.await
+                }
+            }
         }
     }
 

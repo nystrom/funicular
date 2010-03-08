@@ -14,52 +14,68 @@ import funicular.Intrinsics._
  * The representation of an X10 future expression.
  * @author tardieu
  */
-class Future[A](eval: => A) extends AnyRef with funicular.Future[A] {
+class Future[A](name: String, eval: => A) extends AnyRef with funicular.Future[A] {
     /**
      * Latch for signaling and wait
      */
     private val latch = new Latch
+    private var isStarted = false
+    private val startLock = new Lock
 
     /**
      * Set if the activity terminated with an exception.
      * Can only be of type Error or RuntimeException
      */
-    private var exception: List[Throwable] = Nil
-    private var result: List[A] = Nil
+    private var exception: Option[Throwable] = None
+    private var result: Option[A] = None
 
     def forced: Boolean = latch.apply
+    def started: Boolean = startLock.withLock { isStarted }
     
     def force = {
+        start
         latch.await
-        if (exception.length > 0) {
-            val e = exception(0)
-            if (e.isInstanceOf[Error])
-                throw e.asInstanceOf[Error]
-            if (e.isInstanceOf[RuntimeException])
-                throw e.asInstanceOf[RuntimeException]
-            throw new RuntimeException(e)
+        exception match {
+            case Some(e) => {
+                if (e.isInstanceOf[Error])
+                    throw e.asInstanceOf[Error]
+                if (e.isInstanceOf[RuntimeException])
+                    throw e.asInstanceOf[RuntimeException]
+                throw new RuntimeException(e)
+            }
+            case None => ()
         }
-        result.head
+        result match {
+            case Some(v) => v
+            case None => throw new RuntimeException("future forced, but no value")
+        }
     }
 
     def start: Unit = {
+        startLock.withLock {
+            if (isStarted) {
+                return
+            }
+            isStarted = true
+        }
         Runtime.runAsync(this.run)
     }
 
-    def run: Unit = {
+    private def run: Unit = {
         try {
-            finish {
-                result = result ::: List(eval)
-                latch.release
-            }
+            result = Some(eval)
         }
         catch {
             case t: Throwable => {
-                exception = exception ::: List(t)
-                latch.release
+                exception = Some(t)
             }
         }
+        finally {
+            latch.release
+        }
     }
+
+    override def toString = name
 }
 
 // vim:shiftwidth=4:tabstop=4:expandtab

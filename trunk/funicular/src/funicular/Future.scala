@@ -17,6 +17,7 @@ trait Future[+A] extends Function0[A] {
     def force: A
     def apply = force
     def start: Unit
+    def started: Boolean
 }
 
 // vim:shiftwidth=4:tabstop=4:expandtab
