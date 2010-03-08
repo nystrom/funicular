@@ -17,6 +17,9 @@ rtc:
 bin/funicular/test/%.class: src/funicular/test/%.scala
 	$(SCALAC) -d bin -classpath $(CP) $<
 
+collatz: compilert bin/funicular/test/Collatz.class
+	scala -cp $(CP) funicular.test.Collatz 100
+
 test1: compilert bin/funicular/test/Test1.class
 	scala -cp $(CP) funicular.test.Test1
 
