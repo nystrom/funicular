@@ -7,12 +7,12 @@ object Test7 {
     finish {
       val A = new Array[Int](100).parInit(i => i)
       /*
-      for (ai <- A.inParallel) {
+      for (ai <- A async) {
           println(ai)
       }
       println("----------------------------------")
       */
-      for (ai <- A.inParallel if ai % 2 == 0) {
+      for (ai <- A async; if ai % 2 == 0) {
           println(ai)
       }
       println("----------------------------------")
