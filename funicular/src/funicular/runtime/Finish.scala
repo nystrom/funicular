@@ -9,40 +9,25 @@
 package funicular.runtime
 
 import funicular.MultipleExceptions
-import java.util.concurrent.locks.ReentrantLock
 
 /**
  * @author tardieu
  */
 class Finish {
-    def withLock[T](body: => T) = 
-        try {
-            lock.lock
-            body
-        }
-        finally {
-            lock.unlock
-        }
+    private val lock = new Lock
+    private var exceptions: List[Throwable] = Nil
+    private var activities: List[Activity] = Nil
 
-    def withoutLock[T](body: => T) = 
-        try {
-            lock.unlock
-            body
-        }
-        finally {
-            lock.lock
-        }
+    def aaa = activities
 
     def join: Unit = {
-        withLock {
+        lock.withLock {
             while (true) {
-                // println("joining " + activities)
                 activities match {
                     case Nil => return
                     case a::as => {
                         activities = as
-                        // println("popping " + a)
-                        withoutLock {
+                        lock.withoutLock {
                             a.join
                         }
                     }
@@ -52,10 +37,8 @@ class Finish {
     }
 
     def run(a: Activity) = {
-        withLock {
+        lock.withLock {
             activities = a::activities
-            // println("pushing " + a)
-            // println("forked " + activities)
         }
         Runtime.pool.execute(a)
     }
@@ -70,11 +53,8 @@ class Finish {
         run(new Activity(body, this))
     }
 
-    private var exceptions: List[Throwable] = Nil
-    private var activities: List[Activity] = Nil
-
     def throwExceptions = {
-        withLock {
+        lock.withLock {
             exceptions match {
                 case Nil => null
                 case e::Nil => throw e
@@ -83,9 +63,7 @@ class Finish {
         }
     }
 
-    val lock = new ReentrantLock
-
-    def pushException(t:Throwable) = withLock {
+    def pushException(t:Throwable) = lock.withLock {
         exceptions = t::exceptions
     }
 }

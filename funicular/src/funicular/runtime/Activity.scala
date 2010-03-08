@@ -17,7 +17,6 @@ class Activity (body: => Unit, val finish: Finish, val clocks: Array[Clock]) ext
      */
     def this(body: => Unit, finish: Finish) {
         this(body, finish, null)
-        // println("this " + this)
     }
 
     def next: Unit = {

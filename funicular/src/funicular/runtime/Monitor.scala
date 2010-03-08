@@ -9,14 +9,13 @@
 package funicular.runtime;
 
 import scala.collection.mutable.Stack;
-import java.util.concurrent.locks.ReentrantLock
 
 
 /**
  * Lock with wait/notify capability implemented using park/unpark
  * @author tardieu
  */
-class Monitor extends ReentrantLock {
+class Monitor extends Lock {
     /**
      * Parked threads
      */
@@ -33,9 +32,9 @@ class Monitor extends ReentrantLock {
         val thread = Runtime.currentThread
         threads.push(thread)
         while (threads.contains(thread)) {
-            unlock
-            Runtime.park
-            lock
+            withoutLock {
+                Runtime.park
+            }
         }
     }
 

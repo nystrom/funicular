@@ -75,14 +75,22 @@ object Intrinsics {
 
   // usage:
   // future(e)
+  def future[A](name: String)(eval: => A): Future[A] = {
+      Runtime.evalFuture[A](name)(eval)
+  }
+
   def future[A](eval: => A): Future[A] = {
-      Runtime.evalFuture[A](eval)
+      Runtime.evalFuture[A]("future")(eval)
   }
 
   // usage:
   // delayedFuture(e)
+  def delayedFuture[A](name: String)(eval: => A): Future[A] = {
+      Runtime.evalDelayedFuture[A](name)(eval)
+  }
+
   def delayedFuture[A](eval: => A): Future[A] = {
-      Runtime.evalDelayedFuture[A](eval)
+      Runtime.evalDelayedFuture[A]("future")(eval)
   }
 
   ////////////////////////////////////////////////////////////////

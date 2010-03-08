@@ -79,8 +79,8 @@ object Runtime {
     /**
      * Eval future expression
      */
-    def evalFuture[A](eval: => A): Future[A] = {
-        val f1 = new Future[A](eval)
+    def evalFuture[A](name: String)(eval: => A): Future[A] = {
+        val f1 = new Future[A](name, eval)
         f1.start
         f1
     }
@@ -88,7 +88,7 @@ object Runtime {
     /**
      * Eval delayed future expression
      */
-    def evalDelayedFuture[A](eval: => A): Future[A] = new Future[A](eval)
+    def evalDelayedFuture[A](name: String)(eval: => A): Future[A] = new Future[A](name, eval)
 
     /**
     * Lock current place
@@ -141,30 +141,15 @@ object Runtime {
      */
     def next = activity.next
 
-    val parLock = new AtomicBoolean(false)
-
-    def withLock(lock: AtomicBoolean)(body: => Unit): Unit = {
-    		while (true) {
-    			while (parLock.get) ()
-    			if (parLock.getAndSet(true)) {
-    				try {
-    					body
-    					return
-    				}
-    				finally {
-    					parLock.set(false)
-    				}
-    			}
-    		}
-    }
+    val parLock = new Lock
 
     // notify the pool a worker is about to execute a blocking operation
-    def increaseParallelism: Unit = withLock(parLock) {
+    def increaseParallelism: Unit = parLock.withLock {
         pool.setParallelism(pool.getParallelism+1)
     }
 
     // notify the pool a worker resumed execution after a blocking operation
-    def decreaseParallelism(n:Int): Unit = withLock(parLock) {
+    def decreaseParallelism(n:Int): Unit = parLock.withLock {
         pool.setParallelism(pool.getParallelism-n)
     }
 
