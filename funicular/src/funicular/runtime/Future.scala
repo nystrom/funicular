@@ -14,7 +14,7 @@ import funicular.Intrinsics._
  * The representation of an X10 future expression.
  * @author tardieu
  */
-class Future[T](eval: => T) extends AnyRef with funicular.Future[T] {
+class Future[A](eval: => A) extends AnyRef with funicular.Future[A] {
     /**
      * Latch for signaling and wait
      */
@@ -24,9 +24,8 @@ class Future[T](eval: => T) extends AnyRef with funicular.Future[T] {
      * Set if the activity terminated with an exception.
      * Can only be of type Error or RuntimeException
      */
-    private var exception = List[Throwable]()
-
-    private var result:List[T] = List[T]()
+    private var exception: List[Throwable] = Nil
+    private var result: List[A] = Nil
 
     def forced: Boolean = latch.apply
     

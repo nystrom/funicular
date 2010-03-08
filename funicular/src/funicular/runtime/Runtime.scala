@@ -36,7 +36,7 @@ object Runtime {
     def finish = {
         val a = activity
         if (a != null)
-            a.finish
+            a.innermostFinish
         else
             null
     }
@@ -50,15 +50,11 @@ object Runtime {
             a.runFinish(body)
         }
         else {
-            println("starting")
             val f = new Finish
             val a = new Activity(body, f)
             f.run(a)
-            println("ran " + a)
             f.join
-            println("finished " + a)
             a.join
-            println("joined " + a)
             f.throwExceptions
         }
     }
@@ -69,22 +65,22 @@ object Runtime {
     def runAsync(clocks: Seq[Clock], body: => Unit) = {
         val f = finish
         if (f == null)
-            throw new RuntimeException
+            throw new RuntimeException("Cannot run an async outside a finish.")
         f.runAsync(clocks, body)
     }
 
     def runAsync(body: => Unit) = {
         val f = finish
         if (f == null)
-            throw new RuntimeException
+            throw new RuntimeException("Cannot run an async outside a finish.")
         f.runAsync(body)
     }
 
     /**
      * Eval future expression
      */
-    def evalFuture[T](eval: => T): Future[T] = {
-        val f1 = new Future[T](eval)
+    def evalFuture[A](eval: => A): Future[A] = {
+        val f1 = new Future[A](eval)
         f1.start
         f1
     }
@@ -92,7 +88,7 @@ object Runtime {
     /**
      * Eval delayed future expression
      */
-    def evalDelayedFuture[T](eval: => T): Future[T] = new Future[T](eval)
+    def evalDelayedFuture[A](eval: => A): Future[A] = new Future[A](eval)
 
     /**
     * Lock current place
