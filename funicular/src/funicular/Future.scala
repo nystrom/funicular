@@ -12,9 +12,9 @@ package funicular
  * The representation of an X10 future expression.
  * @author tardieu
  */
-trait Future[+T] extends Function0[T] {
+trait Future[+A] extends Function0[A] {
     def forced: Boolean
-    def force: T
+    def force: A
     def apply = force
     def start: Unit
 }
