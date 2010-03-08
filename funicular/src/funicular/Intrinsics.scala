@@ -2,13 +2,14 @@ package funicular
 
 import funicular.runtime.Runtime
 import funicular.array.RichArray
-import funicular.array.RichArrayType
+import funicular.array.RichSeq
 
 object Intrinsics {
-  implicit def wrapArray[T: ClassManifest](a: Array[T]) = new RichArray[T](a)
+  implicit def wrapArray[A: ClassManifest](a: Array[A]) = new RichArray[A](a)
+  implicit def wrapSeq[A](a: Seq[A]) = new RichSeq[A](a)
 
   object ParArray {
-      def fromPar[T: ClassManifest](f: Int => T)(n: Int): Array[T] = Array.ofDim[T](n).parInit(f)
+      def fromFunction[A: ClassManifest](f: Int => A)(n: Int): Array[A] = Array.ofDim[A](n).parInit(f)
   }
 
   /**
@@ -45,7 +46,7 @@ object Intrinsics {
 
   // usage:
   // foreach (A) { Ai => body }
-  def foreach[T](a: Array[T])(body: T => Unit) = {
+  def foreach[A](a: Array[A])(body: A => Unit) = {
       val P = Runtime.concurrency
       for (p <- 0 until P) {
           async {
@@ -55,10 +56,6 @@ object Intrinsics {
                   body(a(i))
           }
       }
-      /*
-      for (i <- 0 until a.length)
-          async { body(a(i)) }
-          */
   }
 
   // usage:
@@ -74,22 +71,18 @@ object Intrinsics {
                   body(i)
           }
       }
-      /*
-      for (i <- rng)
-          async { body(i) }
-      */
   }
 
   // usage:
   // future(e)
-  def future[T](eval: => T): Future[T] = {
-      Runtime.evalFuture[T](eval)
+  def future[A](eval: => A): Future[A] = {
+      Runtime.evalFuture[A](eval)
   }
 
   // usage:
   // delayedFuture(e)
-  def delayedFuture[T](eval: => T): Future[T] = {
-      Runtime.evalDelayedFuture[T](eval)
+  def delayedFuture[A](eval: => A): Future[A] = {
+      Runtime.evalDelayedFuture[A](eval)
   }
 
   ////////////////////////////////////////////////////////////////
@@ -104,7 +97,7 @@ object Intrinsics {
 
   // usage:
   // when(cond) { body }
-  def when[T](cond: => Boolean)(body: => T) = atomic {
+  def when[A](cond: => Boolean)(body: => A) = atomic {
       while (! cond)
           Runtime.await
       body
@@ -119,7 +112,7 @@ object Intrinsics {
 
   // usage:
   // atomic { body }
-  def atomic[T](body: => T) = {
+  def atomic[A](body: => A) = {
       try {
           Runtime.lock
           body
