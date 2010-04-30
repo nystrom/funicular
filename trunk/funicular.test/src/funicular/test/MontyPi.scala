@@ -34,7 +34,7 @@ object MontyPi extends X10Application {
 
         println(result.toList)
 
-        val pi = 4 * result.reduce(0.)(_+_) / (N*P)
+        val pi = 4 * result.sum / (N*P)
 
         println("The value of pi is " + pi)
 
