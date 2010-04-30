@@ -18,8 +18,6 @@ class Finish {
     private var exceptions: List[Throwable] = Nil
     private var activities: List[Activity] = Nil
 
-    def aaa = activities
-
     def join: Unit = {
         lock.withLock {
             while (true) {
