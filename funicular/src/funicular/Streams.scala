@@ -27,7 +27,4 @@ object Streams {
 
     def feedbackLoop[S,T,U,V](incoming: Pipeline[S,T], forward: Pipeline[T,U], back: Pipeline[U,T], outgoing: Pipeline[U,V]): Pipeline[S,V]
         = throw new RuntimeException("unimplemented")
-
-    implicit def fun2filter[S,T](f: S => T): Pipeline[S,T]
-        = throw new RuntimeException("unimplemented")
 }

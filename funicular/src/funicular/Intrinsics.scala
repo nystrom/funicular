@@ -6,6 +6,7 @@ import funicular.array.RichSeq
 
 object Intrinsics {
   implicit def wrapArray[A: ClassManifest](a: Array[A]) = new RichArray[A](a)
+  implicit def parArray[A: ClassManifest](a: Array[A]) = wrapArray(a) async
   implicit def wrapSeq[A](a: Seq[A]) = new RichSeq[A](a)
 
   object ParArray {
@@ -59,6 +60,16 @@ object Intrinsics {
   }
 
   // usage:
+  // foreachUnchunked (A) { Ai => body }
+  def foreachUnchunked[A](a: Array[A])(body: A => Unit) = {
+      for (i <- 0 until a.length) {
+          async {
+              body(a(i))
+          }
+      }
+  }
+
+  // usage:
   // foreach (1 to 10) { i => body }
   def foreach(rng: Range)(body: Int => Unit) = {
       val P = Runtime.concurrency
@@ -69,6 +80,16 @@ object Intrinsics {
               val max = Math.min(rng.end, rng.start + (p+1) * N / P)
               for (i <- min until max)
                   body(i)
+          }
+      }
+  }
+
+  // usage:
+  // foreachUnchunked (1 to 10) { i => body }
+  def foreachUnchunked(rng: Range)(body: Int => Unit) = {
+      for (i <- rng) {
+          async {
+              body(i)
           }
       }
   }

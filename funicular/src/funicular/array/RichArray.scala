@@ -8,11 +8,14 @@ class RichArray[A: ClassManifest](a: Array[A]) extends Proxy {
 
     def self = a
 
-    def copy = a.map((t:A) => t)
+    // def get(p: Product2[Int,Int]) = apply(p._1)(p._2)
+    // def get(p: Product) = apply(p.get(0).asInstanceOf[Int])(p.get(1).asInstanceOf[Int])
 
-    def inParallel = new ParArray[A](a)
-    def async = new ParArray[A](a)
-    def asynchronously = new ParArray[A](a)
+    def inParallel = async
+    def asynchronously = async
+    def async = new ParArray[A](a, P)
+
+    def unchunked = new ParArray[A](a, a.length)
 
     def printPar =
         for (ai <- a.inParallel) {
@@ -28,31 +31,5 @@ class RichArray[A: ClassManifest](a: Array[A]) extends Proxy {
             }
         }
         a
-    }
-
-    def lift[B: ClassManifest](f: A => B): Array[B] = 
-        Array.ofDim[B](a.length).parInit(i => f(a(i)))
-
-    def reduce(z: A)(f: (A,A) => A): A = {
-        val r = Array.ofDim[A](P)
-
-        finish {
-            foreach (0 until P) {
-                i => {
-                    val scale = (a.length + P - 1) / P
-                    val min = i*scale
-                    val max = Math.min((i+1)*scale, a.length)
-                    var x = z
-                    for (j <- min until max)
-                        x = f(x, a(j))
-                    r(i) = x
-                }
-            }
-        }
-
-        var x = z
-        for (i <- 0 until P)
-            x = f(x, r(i))
-        x
     }
 }
