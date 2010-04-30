@@ -17,6 +17,12 @@ rtc:
 bin/funicular/test/%.class: src/funicular/test/%.scala
 	$(SCALAC) -d bin -classpath $(CP) $<
 
+sums: compilert bin/funicular/test/Sums.class
+	scala -cp $(CP) funicular.test.Sums
+
+adds: compilert bin/funicular/test/Adds.class
+	scala -cp $(CP) funicular.test.Adds
+
 collatz: compilert bin/funicular/test/Collatz.class
 	scala -cp $(CP) funicular.test.Collatz 100
 
@@ -44,6 +50,9 @@ test7: compilert bin/funicular/test/Test7.class
 test8: compilert bin/funicular/test/Test8.class
 	scala -cp $(CP) funicular.test.Test8
 
+inc: compilert bin/funicular/test/Inc.class
+	scala -cp $(CP) funicular.test.Inc
+
 pra: compilert bin/funicular/test/ParRandomAccess1.class
 	scala -cp $(CP) funicular.test.ParRandomAccess1
 
@@ -53,8 +62,24 @@ fra: compilert bin/funicular/test/FRASimpleDist.class
 fs: compilert bin/funicular/test/FSSimpleDist.class
 	scala -cp $(CP) funicular.test.FSSimpleDist
 
+stencil: compilert bin/funicular/test/Stencil.class
+	scala -cp $(CP) funicular.test.Stencil
+
+fib2: compilert bin/funicular/test/Fib2.class
+	scala -cp $(CP) funicular.test.Fib2 15
+	scala -cp $(CP) funicular.test.Fib2 1
+	scala -cp $(CP) funicular.test.Fib2 2
+	scala -cp $(CP) funicular.test.Fib2 3
+	scala -cp $(CP) funicular.test.Fib2 4
+	scala -cp $(CP) funicular.test.Fib2 5
+
 fib: compilert bin/funicular/test/Fib.class
 	scala -cp $(CP) funicular.test.Fib 15
+	scala -cp $(CP) funicular.test.Fib 1
+	scala -cp $(CP) funicular.test.Fib 2
+	scala -cp $(CP) funicular.test.Fib 3
+	scala -cp $(CP) funicular.test.Fib 4
+	scala -cp $(CP) funicular.test.Fib 5
 
 histogram: compilert bin/funicular/test/Histogram.class
 	scala -cp $(CP) funicular.test.Histogram 100 5
@@ -101,6 +126,12 @@ stream: compilert bin/funicular/test/Stream.class
 
 bs: compilert bin/funicular/test/BlackScholes.class
 	JAVA_OPTS="-Xmx1g -Xss1m" scala -cp $(CP) funicular.test.BlackScholes
+
+dfs: compilert bin/funicular/test/DFS.class
+	JAVA_OPTS="-Xmx1g -Xss1m" time scala -cp $(CP) funicular.test.DFS
+
+bfs: compilert bin/funicular/test/BFS.class
+	JAVA_OPTS="-Xmx1g -Xss1m" time scala -cp $(CP) funicular.test.BFS
 
 clean:
 	-rm -rf ../funicular/bin/* bin/*

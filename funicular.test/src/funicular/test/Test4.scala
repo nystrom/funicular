@@ -7,11 +7,15 @@ object Test4 {
   def main(args: Array[String]): Unit = {
     finish {
       println("0 started")
+
       val c = Clock()
+
       println("c = " + c)
 
       async (c) {
-      println("1 started")
+
+        println("1 started")
+
         next
         for (i <- 0 to 9) {
             println("-- a" + i)
@@ -21,7 +25,8 @@ object Test4 {
       }
 
       async (c) {
-      println("2 started")
+        println("2 started")
+
         next
         for (i <- 0 to 9) {
             next
