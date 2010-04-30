@@ -15,10 +15,10 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
     def +(b: Array[A])(implicit num: Numeric[A]) = Array.ofDim[A](a.length).parInit(i => num.plus( a(i) , b(i)))
     def -(b: Array[A])(implicit num: Numeric[A]) = Array.ofDim[A](a.length).parInit(i => num.minus( a(i) , b(i)))
     def *(b: Array[A])(implicit num: Numeric[A]) = Array.ofDim[A](a.length).parInit(i => num.times( a(i) , b(i)))
+    def max(b: Array[A])(implicit num: Numeric[A]) = Array.ofDim[A](a.length).parInit(i => num.max(a(i), b(i)))
+    def min(b: Array[A])(implicit num: Numeric[A]) = Array.ofDim[A](a.length).parInit(i => num.min(a(i), b(i)))
     def negate(implicit num: Numeric[A]) = Array.ofDim[A](a.length).parInit(i => num.negate(a(i)))
-
-    // def max(b: Array[A]) = Array.ofDim[A](a.length).parInit(i => a(i) max b(i))
-    // def min(b: Array[A]) = Array.ofDim[A](a.length).parInit(i => a(i) min b(i))
+    def abs(implicit num: Numeric[A]) = Array.ofDim[A](a.length).parInit(i => num.abs(a(i)))
 
     def flatMap[B](f: A => Iterable[B]): Seq[B] = {
         val spawn = (0 until a.length).map(j => future { f(a(j)) })
