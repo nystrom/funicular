@@ -94,8 +94,27 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
     def reduce(f: (A,A) => A): A = {
         if (a.length == 0)
             throw new UnsupportedOperationException
-        val z = a(0)
-        reduce(z)(f)
+        
+        val r = Array.ofDim[A](P)
+
+        finish {
+            par (0 until P) {
+                i => {
+                    val scale = (a.length + P - 1) / P
+                    val min = i*scale
+                    val max = Math.min((i+1)*scale, a.length)
+                    var x = a(min)
+                    for (j <- min+1 until max)
+                        x = f(x, a(j))
+                    r(i) = x
+                }
+            }
+        }
+
+        var x = r(0)
+        for (i <- 1 until P)
+            x = f(x, r(i))
+        x
     }
 
     def reduce(z: A)(f: (A,A) => A): A = {
