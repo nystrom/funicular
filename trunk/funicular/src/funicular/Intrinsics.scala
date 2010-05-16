@@ -11,6 +11,7 @@ object Intrinsics {
 
   object ParArray {
       def fromFunction[A: ClassManifest](f: Int => A)(n: Int): Array[A] = Array.ofDim[A](n).parInit(f)
+      def tabulate[A: ClassManifest](n: Int)(f: Int => A): Array[A] = Array.ofDim[A](n).parInit(f)
   }
 
   /**
