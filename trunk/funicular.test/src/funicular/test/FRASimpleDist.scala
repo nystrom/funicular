@@ -10,7 +10,7 @@ object FRASimpleDist {
   class LocalTable( val a: Array[Long], val mask: Int) {
     
     def this(size:Int) {
-        this(Array.fromFunction((i:Int) => i.toLong)(size), size-1)
+        this(Array.tabulate(size)(_.toLong), size-1)
     }
     
     def update(ran:Long) {
@@ -86,7 +86,7 @@ object FRASimpleDist {
         val num_updates = 4*tableSize
 
         // create local tables
-        val tables = Array.fromFunction[LocalTable]((i:Int) => new LocalTable(localTableSize))(MAX_PLACES)
+        val tables = Array.tabulate[LocalTable](MAX_PLACES)((i:Int) => new LocalTable(localTableSize))
 
         // print some info
         println("Main table size   = 2^" +logLocalTableSize + "*" + MAX_PLACES+" = " + tableSize+ " words")

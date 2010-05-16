@@ -47,14 +47,14 @@ object GCSpheres {
 
         // the array can go on the heap
         // but the elements ought to be /*inlined*/ in the array
-        val spheres = Array.fromFunction(
+        val spheres = Array.tabulate(num_objects)(
             (i:Int) => {
                 val x = (ran.nextDouble()*world_size).toFloat
                 val y = (ran.nextDouble()*world_size).toFloat
                 val z = (ran.nextDouble()*world_size).toFloat
                 val r = (ran.nextDouble()*obj_max_size).toFloat
                 new WorldObject(x,y,z,r)
-            })(num_objects)
+            })
 
         val time_start = System.nanoTime()
 
@@ -68,9 +68,7 @@ object GCSpheres {
 
             val pos = Vector3(x,y,z)
 
-            val n = spheres.mapReduce1(
-                (s:WorldObject) => if (s.intersects(pos)) 1 else 0,
-                (x:Int,y:Int) => x+y)
+            val n = spheres.map((s:WorldObject) => if (s.intersects(pos)) 1 else 0).reduce((x:Int,y:Int) => x+y)
             counter += n
 
             /*

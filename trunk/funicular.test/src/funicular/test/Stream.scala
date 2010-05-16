@@ -26,11 +26,11 @@ class Stream {
     //
     //
 
-    val as = Array.fromFunction((p:Int) => new Array[Double](localSize))(PARALLELISM)
+    val as = Array.tabulate(PARALLELISM)((p:Int) => new Array[Double](localSize))
     
-    val bs = Array.fromFunction((p:Int) => Array.fromFunction((i:Int) => alpha*(p*localSize+i))(localSize))(PARALLELISM)
+    val bs = Array.tabulate(PARALLELISM)((p:Int) => Array.tabulate(localSize)((i:Int) => alpha*(p*localSize+i)))
 
-    val cs = Array.fromFunction((p:Int) => Array.fromFunction((i:Int) => beta*(p*localSize+i))(localSize))(PARALLELISM)
+    val cs = Array.tabulate(PARALLELISM)((p:Int) => Array.tabulate(localSize)((i:Int) => beta*(p*localSize+i)))
 
     def once = {
         finish {

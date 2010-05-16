@@ -15,10 +15,10 @@ object NQueensPar {
         val count = high - low + 1
         val baseSize = count/P
         val extra = count - baseSize*P
-        Array.fromFunction[Range]((i:Int) => {
+        Array.tabulate[Range](P)((i:Int) => {
                 val start = low+i*baseSize + (if (i < extra) i else extra)
                 start to (start + baseSize + (if (i < extra) 0 else -1))
-        })(P)
+        })
     }
 
     val expectedSolutions =
@@ -34,7 +34,7 @@ object NQueensPar {
     class Board private (q: Array[Int]) {
         def this() = this(new Array[Int](0))
         def this(old: Array[Int], newItem: Int) =
-            this(Array.fromFunction((i:Int) => (if (i < old.length) old(i) else newItem))(old.length+1))
+            this(Array.tabulate(old.length+1)((i:Int) => (if (i < old.length) old(i) else newItem)))
 
         def safe(j: Int): Boolean = {
             val n = q.length

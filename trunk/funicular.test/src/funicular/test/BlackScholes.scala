@@ -79,9 +79,9 @@ object BlackScholes {
         val h_PutResultCPU  = Array.make[Float](OPT_N, -1.0f)
         val h_CallResultGPU = Array.make[Float](OPT_N, 0.0f)
         val h_PutResultGPU  = Array.make[Float](OPT_N, 0.0f)
-        val h_StockPrice    = Array.fromFunction[Float]((i:Int)=>rand.nextFloat)(OPT_N)
-        val h_OptionStrike  = Array.fromFunction[Float]((i:Int)=>rand.nextFloat)(OPT_N)
-        val h_OptionYears   = Array.fromFunction[Float]((i:Int)=>rand.nextFloat)(OPT_N)
+        val h_StockPrice    = Array.tabulate[Float](OPT_N)((i:Int)=>rand.nextFloat)
+        val h_OptionStrike  = Array.tabulate[Float](OPT_N)((i:Int)=>rand.nextFloat)
+        val h_OptionYears   = Array.tabulate[Float](OPT_N)((i:Int)=>rand.nextFloat)
 
         // Device arrays
         val d_CallResult    = Array.make[Float](OPT_N, 0.0f)

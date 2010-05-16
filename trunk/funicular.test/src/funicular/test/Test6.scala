@@ -7,7 +7,7 @@ object Test6 {
     finish {
       val A = new Array[Double](100).parInit(i => i)
       println("created A")
-      println(A.reduce(_+_, 0.))
+      println(A.reduce(0.)(_+_))
     }
   }
 }

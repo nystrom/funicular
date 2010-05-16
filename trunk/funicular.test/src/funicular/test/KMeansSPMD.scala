@@ -53,12 +53,12 @@ object KMeansSPMD {
 
             val init_points = (i:Int) =>
                 java.lang.Float.intBitsToFloat(java.lang.Integer.reverseBytes(fr.readInt))
-            val points_cache = Array.fromFunction(init_points)(POINTS*DIM)
-            val points = Array.fromFunction((i:Int) => Array.fromFunction((j:Int) => points_cache(i*DIM+j))(DIM))(POINTS)
+            val points_cache = Array.tabulate(POINTS*DIM)(init_points)
+            val points = Array.tabulate(POINTS)((i:Int) => Array.tabulate(DIM)((j:Int) => points_cache(i*DIM+j)))
 
-            val central_clusters = Array.fromFunction((i:Int) => points_cache(i))(CLUSTERS*DIM)
+            val central_clusters = Array.tabulate(CLUSTERS*DIM)((i:Int) => points_cache(i))
             // used to measure convergence at each iteration:
-            val central_clusters_old = Array.fromFunction((i:Int) => central_clusters(i))(CLUSTERS*DIM)
+            val central_clusters_old = Array.tabulate(CLUSTERS*DIM)((i:Int) => central_clusters(i))
             val central_cluster_counts = Array.make(CLUSTERS, 0)
 
             var finished = false

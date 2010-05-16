@@ -33,7 +33,7 @@ object KMeans {
 
         def this(dim:Int, init:(Int)=>Float) {
             this(dim)
-            vec = Array.fromFunction(init)(dim)
+            vec = Array.tabulate(dim)(init)
             count = 0
         }
 
@@ -92,9 +92,9 @@ class KMeans(myDim:Int) {
 
     def computeMeans(myK:Int, points: Array[ValVector]): KMeansData = {
         var redCluster : KMeansData =
-            Array.fromFunction((i:Int)=> new V(myDim, (j:Int)=>points(i)(j)))(myK)
+            Array.tabulate(myK)((i:Int)=> new V(myDim, (j:Int)=>points(i)(j)))
         var blackCluster : KMeansData =
-            Array.fromFunction((i:Int)=> new V(myDim, (j:Int)=>0.0F))(myK)
+            Array.tabulate(myK)((i:Int)=> new V(myDim, (j:Int)=>0.0F))
 
         for (i <- 1 to ITERATIONS) {
             val tmp = redCluster
@@ -133,8 +133,8 @@ class KMeans(myDim:Int) {
   
     def main(args : Array[String]) = {
         val rnd = new Random(0)
-        val points = Array.fromFunction(
-                _ => Array.fromFunction(_ => rnd.nextFloat)(DIM))(POINTS)
+        val points = Array.tabulate(POINTS)(
+                _ => Array.tabulate(DIM)(_ => rnd.nextFloat))
         val result = new KMeans(DIM).computeMeans(K, points)
         for (k <- 0 until K)
             result(k).print
