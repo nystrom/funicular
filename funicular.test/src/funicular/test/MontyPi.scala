@@ -18,7 +18,7 @@ object MontyPi extends X10Application {
 
         val N = s(0).toInt
 
-        val result = ParArray.fromFunction[Double] {
+        val result = ParArray.tabulate[Double](P) {
             i => {
                 val r = new Random
                 var result = 0.0
@@ -30,7 +30,7 @@ object MontyPi extends X10Application {
                 }
                 result
             }
-        } (P)
+        }
 
         println(result.toList)
 

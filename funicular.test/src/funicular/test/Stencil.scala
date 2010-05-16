@@ -8,8 +8,8 @@ object Stencil {
         // 100 x 100 array of random points
         val rnd = new Random(0)
         val N = 100
-        val A = Array.fromFunction(
-                _ => Array.fromFunction(_ => rnd.nextFloat)(N))(N)
+        val A = Array.tabulate(N)(
+                _ => Array.tabulate(N)(_ => rnd.nextFloat))
 
         val B = Array.ofDim[Float](N, N)
 

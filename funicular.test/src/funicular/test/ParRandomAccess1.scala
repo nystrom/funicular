@@ -70,7 +70,7 @@ object ParRandomAccess1 {
             def array: Array[Long] = a
 
             def this(size:Int) = {
-                this(Array.fromFunction((i:Int) => i.toLong)(size), size-1)
+                this(Array.tabulate(size)(_.toLong), size-1)
             }
             
             def update(ran: Long) = {
@@ -80,7 +80,7 @@ object ParRandomAccess1 {
             }
         }
 
-        val tables = Array.fromFunction(_ => new LocalTable(localTableSize))(PARALLELISM)
+        val tables = Array.tabulate(PARALLELISM)(_ => new LocalTable(localTableSize))
 
         final def randomAccessUpdate(tables: Array[LocalTable]) = {
             finish {
