@@ -52,10 +52,8 @@ object Runtime {
         else {
             val f = new Finish
             val a = new Activity(body, f)
-            f.run(a)
-            f.join
-            a.join
-            f.throwExceptions
+            Runtime.pool.invoke(a)
+            f.joinAndThrow
         }
     }
 
@@ -144,14 +142,22 @@ object Runtime {
     val parLock = new Lock
 
     // notify the pool a worker is about to execute a blocking operation
-    def increaseParallelism: Unit = parLock.withLock {
+    def increaseParallelism: Unit =
+        pool.addWorkers(1)
+    /*
+    parLock.withLock {
         pool.setParallelism(pool.getParallelism+1)
     }
+    */
 
     // notify the pool a worker resumed execution after a blocking operation
-    def decreaseParallelism(n:Int): Unit = parLock.withLock {
+    def decreaseParallelism(n:Int): Unit = 
+        pool.removeWorkers(n)
+    /*
+    parLock.withLock {
         pool.setParallelism(pool.getParallelism-n)
     }
+    */
 
     // park current thread
     def park = java.util.concurrent.locks.LockSupport.park
