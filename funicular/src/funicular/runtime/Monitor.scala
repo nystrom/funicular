@@ -6,9 +6,9 @@
  *
  */
 
-package funicular.runtime;
+package funicular.runtime
 
-import scala.collection.mutable.Stack;
+import scala.collection.mutable.Stack
 
 
 /**
@@ -49,7 +49,7 @@ class Monitor extends Lock {
         if (size > 0) {
             Runtime.decreaseParallelism(size)
             for (i <- 0 until size)
-            	Runtime.unpark(threads.pop);
+            	Runtime.unpark(threads.pop)
         }
         unlock
     }

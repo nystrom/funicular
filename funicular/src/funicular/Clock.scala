@@ -8,9 +8,9 @@ object Clock {
 }
 
 trait Clock {
-    def drop: Unit;
-    def registered: Boolean;
-    def dropped: Boolean;
-    def resume: Unit;
-    def next: Unit;
+    def drop: Unit
+    def registered: Boolean
+    def dropped: Boolean
+    def resume: Unit
+    def next: Unit
 }

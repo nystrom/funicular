@@ -34,11 +34,26 @@ class Finish {
         }
     }
 
+    def joinAndThrow = {
+        join
+        throwExceptions
+    }
+
+/*
+    def runTop(a: Activity) = {
+        lock.withLock {
+            activities = a::activities
+        }
+        Runtime.pool.invoke(a)
+    }
+    */
+
     def run(a: Activity) = {
         lock.withLock {
             activities = a::activities
         }
-        Runtime.pool.execute(a)
+        a.fork
+        //Runtime.pool.execute(a)
     }
 
     def runAsync(clocks: Seq[Clock], body: => Unit): Unit = {

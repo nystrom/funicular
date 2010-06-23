@@ -36,8 +36,7 @@ class Activity (body: => Unit, val finish: Finish, val clocks: Array[Clock]) ext
         try {
             innermostFinish = f
             body
-            f.join
-            f.throwExceptions
+            f.joinAndThrow
         }
         finally {
             innermostFinish = old
