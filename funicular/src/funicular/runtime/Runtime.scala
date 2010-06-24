@@ -118,7 +118,6 @@ object Runtime {
         val a = activity
         assert(false, "sleep is broken")
         try {
-            increaseParallelism
             java.lang.Thread.sleep(millis)
             return true
         }
@@ -126,9 +125,6 @@ object Runtime {
             case e:InterruptedException => {
                 return false
             }
-        }
-        finally {
-            decreaseParallelism(1)
         }
     }
 
@@ -138,26 +134,6 @@ object Runtime {
      * Next statement = next on all clocks in parallel.
      */
     def next = activity.next
-
-    val parLock = new Lock
-
-    // notify the pool a worker is about to execute a blocking operation
-    def increaseParallelism: Unit =
-        pool.addWorkers(1)
-    /*
-    parLock.withLock {
-        pool.setParallelism(pool.getParallelism+1)
-    }
-    */
-
-    // notify the pool a worker resumed execution after a blocking operation
-    def decreaseParallelism(n:Int): Unit = 
-        pool.removeWorkers(n)
-    /*
-    parLock.withLock {
-        pool.setParallelism(pool.getParallelism-n)
-    }
-    */
 
     // park current thread
     def park = java.util.concurrent.locks.LockSupport.park

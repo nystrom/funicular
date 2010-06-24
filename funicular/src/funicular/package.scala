@@ -1,10 +1,8 @@
-package funicular
+package object funicular {
+  import runtime.Runtime
+  import array.RichArray
+  import array.RichSeq
 
-import funicular.runtime.Runtime
-import funicular.array.RichArray
-import funicular.array.RichSeq
-
-object Intrinsics {
   implicit def wrapArray[A: ClassManifest](a: Array[A]) = new RichArray[A](a)
   implicit def parArray[A: ClassManifest](a: Array[A]) = wrapArray(a) async
   implicit def wrapSeq[A](a: Seq[A]) = new RichSeq[A](a)
