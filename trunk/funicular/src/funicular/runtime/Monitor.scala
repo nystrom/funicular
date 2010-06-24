@@ -28,7 +28,6 @@ class Monitor extends Lock {
      * Must not be called while holding the lock more than once
      */
     def await = {
-        Runtime.increaseParallelism
         val thread = Runtime.currentThread
         threads.push(thread)
         while (threads.contains(thread)) {
@@ -47,7 +46,6 @@ class Monitor extends Lock {
     def release = {
         val size = threads.size
         if (size > 0) {
-            Runtime.decreaseParallelism(size)
             for (i <- 0 until size)
             	Runtime.unpark(threads.pop)
         }
