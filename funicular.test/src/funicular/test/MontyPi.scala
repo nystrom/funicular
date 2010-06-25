@@ -1,6 +1,6 @@
 package funicular.test
 
-import funicular.Intrinsics._
+import funicular._
 import funicular.X10Application
 import funicular.Config
 import scala.util.Random

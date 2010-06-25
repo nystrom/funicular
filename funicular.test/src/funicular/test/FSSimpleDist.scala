@@ -1,6 +1,6 @@
 package funicular.test
 
-import funicular.Intrinsics._
+import funicular._
 
 /**
  * Version of Stream with a collection of local arrays implementing a

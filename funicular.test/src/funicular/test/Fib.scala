@@ -6,7 +6,7 @@ package funicular.test
  *  This is an example program used in the X10 1.7 Tutorial.
  *
  */
-import funicular.Intrinsics._
+import funicular._
 
 /**
  * This is a small program to illustrate the use of 

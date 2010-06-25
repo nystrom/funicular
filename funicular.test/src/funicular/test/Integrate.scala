@@ -1,6 +1,6 @@
 package funicular.test
 
-import funicular.Intrinsics._
+import funicular._
 
 /*
  *
