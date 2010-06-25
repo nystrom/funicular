@@ -1,6 +1,6 @@
 package funicular.test
 
-import funicular.Intrinsics._
+import funicular._
 
 /**
  * A simple illustration of loop parallelization within a single place.

@@ -1,6 +1,6 @@
 package funicular.test
 
-import funicular.Intrinsics._
+import funicular._
 
 object Test6 {
   def main(args : Array[String]) : Unit = {

@@ -1,6 +1,6 @@
 package funicular.test
 
-import funicular.Intrinsics._
+import funicular._
 import funicular.Clock
 import java.io._
 import scala.util.Random

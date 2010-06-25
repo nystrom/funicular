@@ -1,6 +1,6 @@
 package funicular.test
 
-import funicular.Intrinsics._
+import funicular._
 import scala.util.Random
 
 /* This class represents a real-world problem in graphics engines --

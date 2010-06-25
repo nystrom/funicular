@@ -1,6 +1,5 @@
 package funicular.test
 
-import funicular.Intrinsics._
 import funicular._
 
 // Take any natural number n. If n is even, divide it by 2 (n / 2), otherwise
