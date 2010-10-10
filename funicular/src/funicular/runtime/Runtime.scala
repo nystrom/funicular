@@ -51,7 +51,7 @@ object Runtime {
         }
         else {
             val f = new Finish
-            val a = new Activity(body, f)
+            val a = new Activity(() => body, f)
             Runtime.pool.invoke(a)
             f.joinAndThrow
         }
@@ -60,14 +60,14 @@ object Runtime {
     /**
      * Run async
      */
-    def runAsync(clocks: Seq[Clock], body: => Unit) = {
+    def runAsync[A](clocks: Seq[Clock], body: => A): Unit = {
         val f = finish
         if (f == null)
             throw new RuntimeException("Cannot run an async outside a finish.")
         f.runAsync(clocks, body)
     }
 
-    def runAsync(body: => Unit) = {
+    def runAsync[A](body: => A): Unit = {
         val f = finish
         if (f == null)
             throw new RuntimeException("Cannot run an async outside a finish.")

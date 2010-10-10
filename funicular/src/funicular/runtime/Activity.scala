@@ -11,11 +11,11 @@ package funicular.runtime
 /**
 * @author tardieu
 */
-class Activity (body: => Unit, val finish: Finish, val clocks: Array[Clock]) extends jsr166y.RecursiveAction {
+class Activity (body: () => _, val finish: Finish, val clocks: Array[Clock]) extends jsr166y.RecursiveAction {
     /**
      * Create clocked activity.
      */
-    def this(body: => Unit, finish: Finish) {
+    def this(body: () => _, finish: Finish) {
         this(body, finish, null)
     }
 
@@ -30,7 +30,7 @@ class Activity (body: => Unit, val finish: Finish, val clocks: Array[Clock]) ext
      */
     var innermostFinish: Finish = finish
 
-    def runFinish(body: => Unit): Unit = {
+    def runFinish[B](body: => B): Unit = {
         val old = innermostFinish
         val f = new Finish
         try {

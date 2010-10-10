@@ -34,19 +34,19 @@ package object funicular {
   
   // usage:
   // async { body }
-  def async(body: => Unit) = {
+  def async[A](body: => A): Unit = {
     Runtime.runAsync(body)
   }
   
   // usage:
   // async (clocks) { body }
-  def async(clocks: Clock*)(body: => Unit) = {
+  def async[A](clocks: Clock*)(body: => A): Unit = {
     Runtime.runAsync(clocks.map((c: Clock) => c.asInstanceOf[funicular.runtime.Clock]), body)
   }
 
   // usage:
   // foreach (A) { Ai => body }
-  def foreach[A](a: Array[A])(body: A => Unit) = {
+  def foreach[A,B](a: Array[A])(body: A => B): Unit = {
       val P = Runtime.concurrency
       for (p <- 0 until P) {
           async {

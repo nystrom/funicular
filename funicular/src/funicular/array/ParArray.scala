@@ -67,6 +67,15 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
     }
 
     def foreach[B](f: A => B): Unit = {
+        // TODO: 
+        // break in two
+        // recursively break the first half in two
+        // repeat until 8x NPROCS
+        // so, next block is twice as large as current block
+        // 112-4---8-------16--------------
+        // --
+        // also break recursively in two when stealing
+        // don't break recursively in two if not stealing
         par (0 until P) {
             i => {
                 val scale = (a.length + P - 1) / P
