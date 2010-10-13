@@ -47,7 +47,7 @@ class Activity (body: () => _, val finish: Finish, val clocks: Array[Clock]) ext
         val old = Runtime.myActivity.get
         try {
             Runtime.myActivity.set(this)
-            body
+            body()
         }
         catch { 
             case t:Throwable => innermostFinish.pushException(t)
