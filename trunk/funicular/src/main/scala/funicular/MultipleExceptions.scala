@@ -1,8 +1,6 @@
 package funicular
 
-import scala.collection.Iterable
-
-class MultipleExceptions(val exceptions: Iterable[Throwable]) extends Exception {
+class MultipleExceptions(val exceptions: Collection[Throwable]) extends Exception {
     override def printStackTrace = {
         super.printStackTrace
         var msg = "Caused by:"
