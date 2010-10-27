@@ -9,6 +9,7 @@ object Test4 {
       println("0 started")
 
       val c = Clock()
+      c.register
 
       println("c = " + c)
 

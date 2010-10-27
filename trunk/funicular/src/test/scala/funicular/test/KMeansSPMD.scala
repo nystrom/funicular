@@ -59,7 +59,7 @@ object KMeansSPMD {
             val central_clusters = Array.tabulate(CLUSTERS*DIM)((i:Int) => points_cache(i))
             // used to measure convergence at each iteration:
             val central_clusters_old = Array.tabulate(CLUSTERS*DIM)((i:Int) => central_clusters(i))
-            val central_cluster_counts = Array.make(CLUSTERS, 0)
+            val central_cluster_counts = Array.fill(CLUSTERS)(0)
 
             var finished = false
             // SPMD style for algorithm
@@ -74,11 +74,11 @@ object KMeansSPMD {
                 for (d <- 0 until P) async (clk) {
                     val n = points.length
                     val min = d * (n/P)
-                    val max = Math.min(n, (d+1) * (n/P))
+                    val max = math.min(n, (d+1) * (n/P))
 
-                    val clusters = Array.make(CLUSTERS*DIM, 0.0F)
-                    val new_clusters = Array.make(CLUSTERS*DIM, 0.0F)
-                    val cluster_counts = Array.make(CLUSTERS*DIM, 0)
+                    val clusters = Array.fill(CLUSTERS*DIM)(0.0F)
+                    val new_clusters = Array.fill(CLUSTERS*DIM)(0.0F)
+                    val cluster_counts = Array.fill(CLUSTERS*DIM)(0)
 
                     for (iter <- 0 until ITERATIONS; if (! finished)) {
                         println("Iteration: "+iter)
@@ -152,7 +152,7 @@ object KMeansSPMD {
                             var b:Boolean = true
                             finished = true
                             for (j <- 0 until CLUSTERS*DIM; if (b)) {
-                                if (Math.abs(central_clusters_old(j)-central_clusters(j))>0.0001) {
+                                if (math.abs(central_clusters_old(j)-central_clusters(j))>0.0001) {
                                     finished = false
                                     b = false
                                 }

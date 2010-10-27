@@ -1,7 +1,6 @@
 package funicular.test
 
 import funicular._
-import funicular.Clock
 
 object Test5 {
   val N = 1000

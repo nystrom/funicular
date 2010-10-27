@@ -13,7 +13,7 @@ object Collatz {
       val A = Array.make[Future[List[Int]]](10000, null)
 
       for (i <- 1 until A.length) {
-          A(i) = delayedFuture[List[Int]]("future A(" + i + ")") {
+          A(i) = delayedFuture[List[Int]] {
               compute(A, i)
           }
       }
