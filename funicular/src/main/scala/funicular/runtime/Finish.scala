@@ -56,10 +56,10 @@ class Finish {
         //Runtime.pool.execute(a)
     }
 
-    def runAsync[A](clocks: Seq[Clock], body: => A): Unit = {
+    def runAsync[A](clocks: Seq[funicular.Clock], body: => A): Unit = {
         for (clock <- clocks)
             clock.register
-        run(new Activity(() => body, this, clocks.toArray))
+        run(new Activity(() => body, this, clocks))
     }
 
     def runAsync[A](body: => A): Unit = {
