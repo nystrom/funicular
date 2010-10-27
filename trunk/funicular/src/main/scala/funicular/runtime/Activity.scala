@@ -52,6 +52,9 @@ class Activity(body: () => _, val finish: Finish, val clocks: Seq[funicular.Cloc
     val old = Runtime.myActivity.get
     try {
       Runtime.myActivity.set(this)
+      if (null != clocks)
+        for (clock <- clocks)
+          clock.register
       body()
     } catch {
       case t: Throwable => innermostFinish.pushException(t)
