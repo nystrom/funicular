@@ -22,14 +22,14 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
 
     def flatMap[B](f: A => Iterable[B]): Seq[B] = {
         val spawn = (0 until a.length).map(j => future { f(a(j)) })
-        new ParSeq[B](spawn.map(_.force).flatMap(identity))
+        new ParSeq[B](spawn.map((fi: Future[Iterable[B]]) => fi.force).flatMap(identity))
 /*
 
         val result = Array.ofDim[Iterable[Future[Iterable[B]]]](P)
         for (i <- 0 until P) {
             val scale = (a.length + P - 1) / P
             val min = i*scale
-            val max = math.min((i+1)*scale, a.length)
+            val max = Math.min((i+1)*scale, a.length)
             val s = (min until max).map(a).map(aj => future { f(aj) })
             result(i) = s
         }
@@ -42,7 +42,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
         for (i <- 0 until P) {
             val scale = (a.length + P - 1) / P
             val min = i*scale
-            val max = math.min((i+1)*scale, a.length)
+            val max = Math.min((i+1)*scale, a.length)
             spawn(i) = future[Seq[A]] {
                 for (j <- min until max; if p(a(j)))
                         yield a(j)
@@ -57,7 +57,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
         for (i <- 0 until P) {
             val scale = (a.length + P - 1) / P
             val min = i*scale
-            val max = math.min((i+1)*scale, a.length)
+            val max = Math.min((i+1)*scale, a.length)
             spawn(i) = future[Seq[B]] {
                 for (j <- min until max) yield f(a(j))
             }
@@ -80,7 +80,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
             i => {
                 val scale = (a.length + P - 1) / P
                 val min = i*scale
-                val max = math.min((i+1)*scale, a.length)
+                val max = Math.min((i+1)*scale, a.length)
                 for (j <- min until max)
                     f(a(j))
             }
@@ -92,7 +92,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
     /**
      * Map the array to another array, in parallel.
      */
-    def mapPar[B: ClassManifest](f: A => B): Array[B] = lift(f)
+    def mapPar[B: ClassManifest](f: A => B): Array[B] = lift[B](f)
     def lift[B: ClassManifest](f: A => B): Array[B] = 
         Array.ofDim[B](a.length).parInit(i => f(a(i)))
 
@@ -111,7 +111,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
                 i => {
                     val scale = (a.length + P - 1) / P
                     val min = i*scale
-                    val max = math.min((i+1)*scale, a.length)
+                    val max = Math.min((i+1)*scale, a.length)
                     var x = a(min)
                     for (j <- min+1 until max)
                         x = f(x, a(j))
@@ -134,7 +134,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
                 i => {
                     val scale = (a.length + P - 1) / P
                     val min = i*scale
-                    val max = math.min((i+1)*scale, a.length)
+                    val max = Math.min((i+1)*scale, a.length)
                     var x = z
                     for (j <- min until max)
                         x = f(x, a(j))
