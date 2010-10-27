@@ -39,7 +39,7 @@ object NQueensPar {
         def safe(j: Int): Boolean = {
             val n = q.length
             for (k <- 0 until n) {
-                if (j == q(k) || Math.abs(n-k) == Math.abs(j-q(k)))
+                if (j == q(k) || math.abs(n-k) == math.abs(j-q(k)))
                     return false
             }
             true
