@@ -3,29 +3,37 @@ package funicular.runtime
 import funicular._
 import funicular.ClockUseException
 
-object Clock {
-  val FIRST_PHASE = 1
-}
-
 class Clock(name: String) extends funicular.Clock { self =>
-
   def this() = this("cluck")
+
+  val debug = 0
+  def dprintln(msg: => String) {
+    if (debug > 0)
+      println(msg)
+  }
+  def ddump(msg: => String) {
+    if (debug > 1)
+      new Exception(msg).printStackTrace
+  }
 
   private val ph = new jsr166y.Phaser(0) {
     override def onAdvance(phase: Int, registered: Int) = {
-      println(self + " + advancing to " + phase + ", " + registered + " registered")
+      dprintln(self + " + advancing to " + phase + ", " + registered + " registered")
       false
     }
   }
 
-  private var reg = Set.empty[Activity]
+  private val lock = new Lock
+  private var registeredActivities = Set.empty[Activity]
 
+  // REMOVED: do not register a new Clock on the current activity
   //    register
 
-  def withExceptions[T](body: => T): T = {
+  private def withExceptions[T](body: => T): T = {
     try {
       body
-    } catch {
+    }
+    catch {
       case e: IllegalStateException => {
           e.printStackTrace
           throw new ClockUseException
@@ -34,37 +42,44 @@ class Clock(name: String) extends funicular.Clock { self =>
   }
 
   def register: Unit = {
-    new Exception("registering " + this + " with " + Runtime.activity).printStackTrace
+    ddump("registering " + this + " with " + Runtime.activity)
     withExceptions {
-      ph.register
-      reg += Runtime.activity
+      lock.withLock {
+        val a = Runtime.activity
+        if (! (registeredActivities contains a)) {
+          ph.register
+          registeredActivities += a
+        }
+      }
     }
   }
 
   // BUG: should return true if THIS activity is registered on the clock
-  def registered = reg contains Runtime.activity
+  def registered = lock.withLock {
+    registeredActivities contains Runtime.activity
+  }
 
   def dropped = !registered
 
   def phase: Int = ph.getPhase
 
   def resume: Unit = {
-    println("resume " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
-    new Exception("resume " + this + " " + Runtime.activity).printStackTrace
+    dprintln("resume " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
+    ddump("resume " + this + " " + Runtime.activity)
     if (dropped)
       throw new ClockUseException
     withExceptions { ph.arrive }
-    println("done with resume " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
+    dprintln("done with resume " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
   }
 
   def next: Unit = {
-    println("next " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
-    new Exception("next " + this + " " + Runtime.activity).printStackTrace
+    dprintln("next " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
+    ddump("next " + this + " " + Runtime.activity)
     if (dropped)
       throw new ClockUseException
     withExceptions { ph.arriveAndAwaitAdvance }
-    println("done with next " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
-    new Exception("done with next " + this + " " + Runtime.activity).printStackTrace
+    dprintln("done with next " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
+    ddump("done with next " + this + " " + Runtime.activity)
   }
 
   def drop: Unit = {
@@ -74,8 +89,16 @@ class Clock(name: String) extends funicular.Clock { self =>
   }
 
   private def doDrop: Unit = {
-    new Exception("dropping " + this).printStackTrace
-    withExceptions { ph.arriveAndDeregister }
+    ddump("dropping " + this + " by " + Runtime.activity)
+    withExceptions {
+      lock.withLock {
+        val a = Runtime.activity
+        if (registeredActivities contains a) {
+          ph.arriveAndDeregister
+          registeredActivities -= a
+        }
+      }
+    }
   }
 
   override def toString = "#" + name + "#arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties

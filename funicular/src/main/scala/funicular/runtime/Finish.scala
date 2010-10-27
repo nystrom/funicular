@@ -57,13 +57,11 @@ class Finish {
     }
 
     def runAsync[A](clocks: Seq[funicular.Clock], body: => A): Unit = {
-        for (clock <- clocks)
-            clock.register
-        run(new Activity(() => body, this, clocks))
+      run(new Activity(() => body, this, clocks))
     }
 
     def runAsync[A](body: => A): Unit = {
-        run(new Activity(() => body, this))
+      run(new Activity(() => body, this))
     }
 
     def throwExceptions = {
