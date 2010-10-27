@@ -4,57 +4,79 @@ import funicular._
 import funicular.ClockUseException
 
 object Clock {
-    val FIRST_PHASE = 1
+  val FIRST_PHASE = 1
 }
 
-class Clock(name:String) extends jsr166y.Phaser with funicular.Clock {
-    def this() = this("clock")
+class Clock(name: String) extends funicular.Clock { self =>
 
-    super.register
-    reg = true
+  def this() = this("cluck")
 
-    def withExceptions[T](body: => T): T = {
-        try {
-            body
+  private val ph = new jsr166y.Phaser(0) {
+    override def onAdvance(phase: Int, registered: Int) = {
+      println(self + " + advancing to " + phase + ", " + registered + " registered")
+      false
+    }
+  }
+
+  private var reg = Set.empty[Activity]
+
+  //    register
+
+  def withExceptions[T](body: => T): T = {
+    try {
+      body
+    } catch {
+      case e: IllegalStateException => {
+          e.printStackTrace
+          throw new ClockUseException
         }
-        catch {
-            case e: IllegalStateException => throw new ClockUseException
-        }
     }
+  }
 
-    override def register: Int = {
-        if (dropped)
-            throw new ClockUseException
-        withExceptions {
-            val r = super.register
-            reg = true
-            r
-        }
+  def register: Unit = {
+    new Exception("registering " + this + " with " + Runtime.activity).printStackTrace
+    withExceptions {
+      ph.register
+      reg += Runtime.activity
     }
+  }
 
-    private var reg = true
+  // BUG: should return true if THIS activity is registered on the clock
+  def registered = reg contains Runtime.activity
 
-    def registered = reg
+  def dropped = !registered
 
-    def dropped = ! reg
+  def phase: Int = ph.getPhase
 
-    def phase: Int = super.getPhase
+  def resume: Unit = {
+    println("resume " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
+    new Exception("resume " + this + " " + Runtime.activity).printStackTrace
+    if (dropped)
+      throw new ClockUseException
+    withExceptions { ph.arrive }
+    println("done with resume " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
+  }
 
-    def resume: Unit = {
-        if (dropped)
-            throw new ClockUseException
-        withExceptions { super.arrive }
-    }
+  def next: Unit = {
+    println("next " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
+    new Exception("next " + this + " " + Runtime.activity).printStackTrace
+    if (dropped)
+      throw new ClockUseException
+    withExceptions { ph.arriveAndAwaitAdvance }
+    println("done with next " + this + " arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties)
+    new Exception("done with next " + this + " " + Runtime.activity).printStackTrace
+  }
 
-    def next : Unit = {
-        if (dropped)
-            throw new ClockUseException
-        withExceptions { super.arriveAndAwaitAdvance }
-    }
+  def drop: Unit = {
+    if (dropped)
+      throw new ClockUseException
+    doDrop
+  }
 
-    def drop: Unit =  {
-        if (dropped)
-            throw new ClockUseException
-        withExceptions { super.arriveAndDeregister }
-    }
+  private def doDrop: Unit = {
+    new Exception("dropping " + this).printStackTrace
+    withExceptions { ph.arriveAndDeregister }
+  }
+
+  override def toString = "#" + name + "#arrived=" + ph.getArrivedParties + "/" + ph.getRegisteredParties
 }

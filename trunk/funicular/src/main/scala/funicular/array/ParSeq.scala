@@ -18,7 +18,7 @@ class ParSeq[A](a: Seq[A]) extends Proxy with Seq[A] {
             i => {
                 val scale = (a.length + P - 1) / P
                 val min = i*scale
-                val max = Math.min((i+1)*scale, a.length)
+                val max = math.min((i+1)*scale, a.length)
                 for (j <- min until max)
                     f(a(j))
             }
