@@ -33,7 +33,7 @@ object Integrate {
       val al = (fl + fc) * hh   
       val ar = (fr + fc) * hh
       val alr = al + ar
-      if (Math.abs(alr - a) < epsilon)
+      if (math.abs(alr - a) < epsilon)
           return alr
       var res1:Double = 0.
       var res2:Double = 0.
