@@ -51,7 +51,7 @@ package object funicular {
     for (p <- 0 until P) {
       async {
         val min = p * a.length / P
-        val max = Math.min(a.length, (p + 1) * a.length / P)
+        val max = math.min(a.length, (p + 1) * a.length / P)
         for (i <- min until max)
           body(a(i))
       }
@@ -76,7 +76,7 @@ package object funicular {
     for (p <- 0 until P) {
       async {
         val min = rng.start + p * N / P
-        val max = Math.min(rng.end, rng.start + (p + 1) * N / P)
+        val max = math.min(rng.end, rng.start + (p + 1) * N / P)
         for (i <- min until max)
           body(i)
       }

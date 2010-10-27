@@ -29,7 +29,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
         for (i <- 0 until P) {
             val scale = (a.length + P - 1) / P
             val min = i*scale
-            val max = Math.min((i+1)*scale, a.length)
+            val max = math.min((i+1)*scale, a.length)
             val s = (min until max).map(a).map(aj => future { f(aj) })
             result(i) = s
         }
@@ -42,7 +42,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
         for (i <- 0 until P) {
             val scale = (a.length + P - 1) / P
             val min = i*scale
-            val max = Math.min((i+1)*scale, a.length)
+            val max = math.min((i+1)*scale, a.length)
             spawn(i) = future[Seq[A]] {
                 for (j <- min until max; if p(a(j)))
                         yield a(j)
@@ -57,7 +57,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
         for (i <- 0 until P) {
             val scale = (a.length + P - 1) / P
             val min = i*scale
-            val max = Math.min((i+1)*scale, a.length)
+            val max = math.min((i+1)*scale, a.length)
             spawn(i) = future[Seq[B]] {
                 for (j <- min until max) yield f(a(j))
             }
@@ -80,7 +80,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
             i => {
                 val scale = (a.length + P - 1) / P
                 val min = i*scale
-                val max = Math.min((i+1)*scale, a.length)
+                val max = math.min((i+1)*scale, a.length)
                 for (j <- min until max)
                     f(a(j))
             }
@@ -111,7 +111,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
                 i => {
                     val scale = (a.length + P - 1) / P
                     val min = i*scale
-                    val max = Math.min((i+1)*scale, a.length)
+                    val max = math.min((i+1)*scale, a.length)
                     var x = a(min)
                     for (j <- min+1 until max)
                         x = f(x, a(j))
@@ -134,7 +134,7 @@ class ParArray[A: ClassManifest](a: Array[A], P: Int) extends Proxy {
                 i => {
                     val scale = (a.length + P - 1) / P
                     val min = i*scale
-                    val max = Math.min((i+1)*scale, a.length)
+                    val max = math.min((i+1)*scale, a.length)
                     var x = z
                     for (j <- min until max)
                         x = f(x, a(j))
