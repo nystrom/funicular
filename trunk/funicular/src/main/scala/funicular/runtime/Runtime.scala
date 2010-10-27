@@ -60,7 +60,7 @@ object Runtime {
     /**
      * Run async
      */
-    def runAsync[A](clocks: Seq[Clock], body: => A): Unit = {
+    def runAsync[A](clocks: Seq[funicular.Clock], body: => A): Unit = {
         val f = finish
         if (f == null)
             throw new RuntimeException("Cannot run an async outside a finish.")
@@ -77,8 +77,8 @@ object Runtime {
     /**
      * Eval future expression
      */
-    def evalFuture[A](name: String)(eval: => A): Future[A] = {
-        val f1 = new Future[A](name, eval)
+    def evalFuture[A](eval: () => A, clocks: Seq[funicular.Clock]): Future[A] = {
+        val f1 = evalDelayedFuture[A](eval, clocks)
         f1.start
         f1
     }
@@ -86,7 +86,9 @@ object Runtime {
     /**
      * Eval delayed future expression
      */
-    def evalDelayedFuture[A](name: String)(eval: => A): Future[A] = new Future[A](name, eval)
+    def evalDelayedFuture[A](eval: () => A, clocks: Seq[funicular.Clock]): Future[A] = {
+        new Future[A]("future", eval, clocks)
+    }
 
     /**
     * Lock current place
