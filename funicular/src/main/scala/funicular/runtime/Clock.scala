@@ -26,9 +26,6 @@ class Clock(name: String) extends funicular.Clock { self =>
   private val lock = new Lock
   private var registeredActivities = Set.empty[Activity]
 
-  // REMOVED: do not register a new Clock on the current activity
-  //    register
-
   private def withExceptions[T](body: => T): T = {
     try {
       body
@@ -40,12 +37,13 @@ class Clock(name: String) extends funicular.Clock { self =>
         }
     }
   }
+  
+  def register: Unit = register(Runtime.activity)
 
-  def register: Unit = {
-    ddump("registering " + this + " with " + Runtime.activity)
+  def register(a: Activity): Unit = {
+    ddump("registering " + this + " with " + a)
     withExceptions {
       lock.withLock {
-        val a = Runtime.activity
         if (! (registeredActivities contains a)) {
           ph.register
           registeredActivities += a
