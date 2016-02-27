@@ -10,7 +10,7 @@ object MontyPi {
 
         if (s.length != 1) {
             println("Usage: MontyPi <number of points>")
-            exit(-1)
+            sys.exit(-1)
         }
 
         val P = 50
@@ -37,7 +37,7 @@ object MontyPi {
 
         println("The value of pi is " + pi)
 
-        val spi = 4 * result.foldLeft[Double](0.)(_+_) / (N*P)
+        val spi = 4 * result.foldLeft[Double](0.0)(_+_) / (N*P)
         println("The value of sequential pi is " + spi)
     }
 

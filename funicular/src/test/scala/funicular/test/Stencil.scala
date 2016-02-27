@@ -21,7 +21,7 @@ object Stencil {
             iters += 1
             for (i <- 1 until (N-1) async) {
                 for (j <- 1 until (N-1) async) {
-                    val t = ( A(i)(j-1) + A(i)(j+1) + A(i-1)(j) + A(i+1)(j) ) / 4.f
+                    val t = ( A(i)(j-1) + A(i)(j+1) + A(i-1)(j) + A(i+1)(j) ) / 4.0f
                     B(i)(j) = (A(i)(j) - t).abs
                     A(i)(j) = t
                 }

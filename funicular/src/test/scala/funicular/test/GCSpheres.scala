@@ -98,7 +98,7 @@ object GCSpheres {
         if (counter != expected) {
             println("number of intersections: "+counter
                                 +" (expected "+expected+")")
-            exit(1)
+            sys.exit(1)
         }
     }
 }

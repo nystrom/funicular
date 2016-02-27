@@ -75,17 +75,17 @@ object BlackScholes {
         val rand = new Random
 
         // Host arrays
-        val h_CallResultCPU = Array.make[Float](OPT_N, 0.0f)
-        val h_PutResultCPU  = Array.make[Float](OPT_N, -1.0f)
-        val h_CallResultGPU = Array.make[Float](OPT_N, 0.0f)
-        val h_PutResultGPU  = Array.make[Float](OPT_N, 0.0f)
-        val h_StockPrice    = Array.tabulate[Float](OPT_N)((i:Int)=>rand.nextFloat)
-        val h_OptionStrike  = Array.tabulate[Float](OPT_N)((i:Int)=>rand.nextFloat)
-        val h_OptionYears   = Array.tabulate[Float](OPT_N)((i:Int)=>rand.nextFloat)
+        val h_CallResultCPU = Array.fill[Float](OPT_N)(0.0f)
+        val h_PutResultCPU  = Array.fill[Float](OPT_N)(-1.0f)
+        val h_CallResultGPU = Array.fill[Float](OPT_N)(0.0f)
+        val h_PutResultGPU  = Array.fill[Float](OPT_N)(0.0f)
+        val h_StockPrice    = Array.fill[Float](OPT_N)(rand.nextFloat)
+        val h_OptionStrike  = Array.fill[Float](OPT_N)(rand.nextFloat)
+        val h_OptionYears   = Array.fill[Float](OPT_N)(rand.nextFloat)
 
         // Device arrays
-        val d_CallResult    = Array.make[Float](OPT_N, 0.0f)
-        val d_PutResult     = Array.make[Float](OPT_N, 0.0f)
+        val d_CallResult    = Array.fill[Float](OPT_N)(0.0f)
+        val d_PutResult     = Array.fill[Float](OPT_N)(0.0f)
         val d_StockPrice    = h_StockPrice.copy
         val d_OptionStrike  = h_OptionStrike.copy
         val d_OptionYears   = h_OptionYears.copy

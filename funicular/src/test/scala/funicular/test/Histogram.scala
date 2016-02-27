@@ -18,7 +18,7 @@ object Histogram {
     def main(args:Array[String]) {
 	if (args.length != 2) {
 	    println("Usage: Histogram SizeOfArray Buckets")
-	    exit(-1)
+	    sys.exit(-1)
         }
 
 	val N = args(0).toInt

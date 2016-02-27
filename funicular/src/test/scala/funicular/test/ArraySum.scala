@@ -12,7 +12,7 @@ object ArraySum {
 
   class ArraySum(size: Int) {
     var sum: Int = 0
-    val data = Array.make(size, 1)
+    val data = Array.fill(size)(1)
 
     def sum(a: Array[Int], start: Int, last: Int): Int = {
         var mySum: Int = 0

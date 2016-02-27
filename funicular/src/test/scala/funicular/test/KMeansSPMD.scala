@@ -180,7 +180,7 @@ object KMeansSPMD {
           case e : IOException => {
             println("We had a little problem:")
             e.printStackTrace
-            exit(1)
+            sys.exit(1)
         }
         }
     }

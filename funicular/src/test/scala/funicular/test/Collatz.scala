@@ -10,7 +10,7 @@ object Collatz {
     finish {
       val N = args(0).toInt
 
-      val A = Array.make[Future[List[Int]]](10000, null)
+      val A = Array.fill[Future[List[Int]]](10000)(null)
 
       for (i <- 1 until A.length) {
           A(i) = delayedFuture[List[Int]] {
