@@ -1,0 +1,1 @@
+Funicular is a shared-memory concurrency library for Scala on the JVM. It is based on a port to Scala of the language runtime system for X10.
