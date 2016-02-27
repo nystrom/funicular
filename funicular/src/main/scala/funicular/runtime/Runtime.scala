@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 * @author tardieu
 */
 object Runtime {
-    val pool = new jsr166y.ForkJoinPool(concurrency)
+    val pool = new java.util.concurrent.ForkJoinPool(concurrency)
 
     lazy val concurrency = funicular.Config.NTHREADS
 

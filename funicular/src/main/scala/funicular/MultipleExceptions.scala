@@ -1,6 +1,6 @@
 package funicular
 
-class MultipleExceptions(val exceptions: Collection[Throwable]) extends Exception {
+class MultipleExceptions(val exceptions: List[Throwable]) extends Exception {
     override def printStackTrace = {
         super.printStackTrace
         var msg = "Caused by:"

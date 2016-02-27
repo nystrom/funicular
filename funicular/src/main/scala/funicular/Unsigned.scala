@@ -199,8 +199,6 @@ case class UInt(rep: Int) {
                 println(u)
         }
 
-        exit(0)
-
         println(1e9.toLong.toUInt)
         println(2e9.toLong.toUInt)
         println(3e9.toLong.toUInt)

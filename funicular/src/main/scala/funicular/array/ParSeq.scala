@@ -14,7 +14,7 @@ class ParSeq[A](a: Seq[A]) extends Proxy with Seq[A] {
     def iterator = a.iterator
 
     override def foreach[B](f: A => B): Unit = {
-        par (0 until P) {
+        funicular.foreach (0 until P) {
             i => {
                 val scale = (a.length + P - 1) / P
                 val min = i*scale

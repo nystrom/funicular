@@ -11,7 +11,7 @@ package funicular.runtime
 /**
  * @author tardieu
  */
-class Activity(body: () => _, val finish: Finish, val clocks: Seq[funicular.Clock]) extends jsr166y.RecursiveAction {
+class Activity(body: () => _, val finish: Finish, val clocks: Seq[funicular.Clock]) extends java.util.concurrent.RecursiveAction {
   /**
    * Create clocked activity.
    */

@@ -1,9 +1,9 @@
 package funicular.test
 
 import java.util.concurrent.atomic.AtomicBoolean
-import jsr166y.ForkJoinTask
-import jsr166y.RecursiveAction
-import jsr166y.ForkJoinPool
+import java.util.concurrent.ForkJoinTask
+import java.util.concurrent.RecursiveAction
+import java.util.concurrent.ForkJoinPool
 
 object NQueensJava {
 

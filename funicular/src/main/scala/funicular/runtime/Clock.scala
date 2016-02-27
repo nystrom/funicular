@@ -16,7 +16,7 @@ class Clock(name: String) extends funicular.Clock { self =>
       new Exception(msg).printStackTrace
   }
 
-  private val ph = new jsr166y.Phaser(0) {
+  private val ph = new java.util.concurrent.Phaser(0) {
     override def onAdvance(phase: Int, registered: Int) = {
       dprintln(self + " + advancing to " + phase + ", " + registered + " registered")
       false
